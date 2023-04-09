@@ -24,6 +24,7 @@ load_dotenv()
 client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGODB_URL"])
 db = client.food_test
 
+data_length = 100000
 
 class PyObjectId(ObjectId):
     @classmethod
@@ -72,7 +73,7 @@ class FoodDetailsModel(BaseModel):
 # List all foods
 @app.get("/fooddetails", response_description="List all foods", response_model=List[FoodDetailsModel])
 async def list_foods():
-    foods = await db["foodDetails"].find().to_list(1000)
+    foods = await db["foodDetails"].find().to_list(data_length)
     return foods
 
 
@@ -87,7 +88,7 @@ async def list_foods():
 class OrderItemWithQuantityModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     orderID: PyObjectId = Field(default_factory=PyObjectId)
-    food: str
+    food: PyObjectId = Field(default_factory=PyObjectId)
     quantity: int
     price: int
 
@@ -111,7 +112,7 @@ class OrderItemWithQuantityModel(BaseModel):
     response_model=List[OrderItemWithQuantityModel]
 )
 async def list_order_items_with_quantities():
-    order_items_with_quantities = await db["orderItemWithQuantities"].find().to_list(1000)
+    order_items_with_quantities = await db["orderItemWithQuantities"].find().to_list(data_length)
     return order_items_with_quantities
 
 
@@ -161,7 +162,7 @@ class OrderModel(BaseModel):
 
 @app.get("/orders", response_description="List all orders", response_model=List[OrderModel])
 async def list_orders():
-    orders = await db["orders"].find().to_list(1000)
+    orders = await db["orders"].find().to_list(data_length)
     return orders
 
 
@@ -206,7 +207,7 @@ class UserModel(BaseModel):
 
 @app.get("/users", response_description="List all users", response_model=List[UserModel])
 async def list_users():
-    users = await db["users"].find().to_list(1000)
+    users = await db["users"].find().to_list(data_length)
     return users
 
 
@@ -236,7 +237,7 @@ class FeedbackModel(BaseModel):
 
 @app.get("/feedbacks", response_description="List all feedbacks", response_model=List[FeedbackModel])
 async def list_feedbacks():
-    feedbacks = await db["feedbacks"].find().to_list(100)
+    feedbacks = await db["feedbacks"].find().to_list(data_length)
     return feedbacks
 
 
@@ -265,7 +266,7 @@ async def list_feedbacks():
 
 @app.get("/aggregate", response_description="Aggregate data", response_model=List[OrderModel])
 async def aggregate_data():
-    orders = await db["orders"].find().to_list(1000)
+    orders = await db["orders"].find().to_list(data_length)
     # orderItemWithQuantities = await db["orderItemWithQuantities"].find().to_list(1000)
     # foodDetails = await db["foodDetails"].find()
     # users = await db["users"].find()
@@ -421,6 +422,9 @@ def process_data():
     # ['_id', 'orderID', 'feedback']
     feedbacks_df = feedbacks_df[['_id', 'orderID', 'feedback']]
 
+    # rename orderWithQuantities_df _id to orderItemID
+    orderItemWithQuantities_df.rename(columns={'_id': 'orderItemID'}, inplace=True)
+
     # print list of columns in each dataframe
     print("orderItemWithQuantities_df: ", orderItemWithQuantities_df.columns)
     print("orders_df: ", orders_df.columns)
@@ -432,9 +436,50 @@ def process_data():
     # add orders_df to orderWithQuantities_df by id to orderID
     df = pd.merge(orderItemWithQuantities_df, orders_df, left_on='orderID', right_on='_id')
 
+    # save to csv
+    df.to_csv(save_path + "aggregate.csv", index=False)
+
+
+    # load csv
+    # df = pd.read_csv(save_path + "aggregate.csv")
+    # check if the merge is correct by comparing orderID and and remove _id_y
+    # if _id exists in orderID then drop it
+    if '_id' in df.columns:
+        print(df[df['orderID'] != df['_id']])
+        df.drop(columns=['_id'], inplace=True)
+    # save to csv
+    df.to_csv(save_path + "aggregate-1.csv", index=False)
+
+    # add foodDetails_df to df by id to food
+    df = pd.merge(df, foodDetails_df, left_on='food', right_on='_id')
+    if '_id' in df.columns:
+        print(df[df['food'] != df['_id']])
+        df.drop(columns=['_id'], inplace=True)
+
+    df.to_csv(save_path + "aggregate-2.csv", index=False)
+
+    # add users_df to df by id to orderedBy
+    df = pd.merge(df, users_df, left_on='orderedBy', right_on='_id')
+    if '_id' in df.columns:
+        print(df[df['orderedBy'] != df['_id']])
+        df.drop(columns=['_id'], inplace=True)
+
+    df.to_csv(save_path + "aggregate-3.csv", index=False)
+
+    # add feedbacks_df to df by id to orderID
+    df = pd.merge(df, feedbacks_df, left_on='orderID', right_on='orderID')
+    df.to_csv(save_path + "aggregate-4.csv", index=False)
+    if '_id' in df.columns:
+        print(df[df['orderID'] != df['_id']])
+        df.drop(columns=['_id'], inplace=True)
+
+    df.to_csv(save_path + "aggregate-5.csv", index=False)
+
+
 
     # save to csv
     df.to_csv(save_path + "aggregate.csv", index=False)
+
 
     print("\n\nName of the file: aggregate")
     print(df.head())
