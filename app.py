@@ -1,5 +1,6 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
+from urllib import request
 
 import pandas as pd
 
@@ -430,6 +431,7 @@ def process_data():
     # save to csv
     df.to_csv(save_path + "processed.csv", index=False)
 
+
 def analyze_data():
     # load csv
     df = pd.read_csv(save_path + "processed.csv")
@@ -466,28 +468,116 @@ def pre_process():
     # remove duplicate values
     df.drop_duplicates(inplace=True)
 
-
     # save to csv
     df.to_csv(save_path + "pre_processed.csv", index=False)
 
 
-# def
+def update_log():
+    # create txt if not exists and write to it f.write("Last updated: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    if not os.path.exists(save_path + "log.txt"):
+        f = open(save_path + "log.txt", "w")
+        f.close()
+
+    # open txt and clean write to it
+    f = open(save_path + "log.txt", "w")
+    f.write("Last updated: " + datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
+    f.close()
+
+
+def load_log():
+    # load txt
+    f = open(save_path + "log.txt", "r")
+    print(f.read())
+    f.close()
+
+    # extract datetime
+    new_datetime = f.read().split("Last updated: ")[1]
+
+    # convert to datetime
+    new_datetime = datetime.strptime(new_datetime, "%d/%m/%Y %H:%M:%S")
+
+    # if last update was more than 1 hour ago
+    if datetime.now() - new_datetime > timedelta(hours=1):
+        return True
+    else:
+        return False
+
 
 from recommand import get_rec
 
-# my_profile = "64315d86362c27c707fe155c"
-my_profile = "64315d86362c27c707fe152z"
-#
+my_profile = "64315d86362c27c707fe155c"
+# my_profile = "64315d86362c27c707fe152z"
+
 if __name__ == "__main__":
     # call_api()
     # aggregate_data()
     # process_data()
     # analyze_data()
     # pre_process()
-    recommendation = get_rec(my_profile)
+    recommendation, user_stat = get_rec(my_profile, num_of_rec=5)
 
-    if recommendation is None:
-        print("No recommendation found")
+    if user_stat == 0:
+        print("New user")
+        print(recommendation)
     else:
+        print("Existing user")
         print(recommendation)
 
+
+# Recommendation
+@app.get("/recommendation/{user_id}")
+async def get_recommendation(user_id: str, num_of_rec: int = 5):
+    if num_of_rec:
+        recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
+    else:
+        recommendation, user_stat = get_rec(user_id, num_of_rec=5)
+
+    update_log()
+    return {"recommendations": recommendation}
+
+
+# Load data and Recommendation
+@app.get("/recommendation-load/{user_id}")
+async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
+    call_api()
+    aggregate_data()
+    process_data()
+    analyze_data()
+    pre_process()
+
+    if num_of_rec:
+        recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
+    else:
+        recommendation, user_stat = get_rec(user_id, num_of_rec=5)
+    return {"recommendations": recommendation}
+
+
+# Load data
+@app.get("/load-data")
+async def load_data():
+    call_api()
+    aggregate_data()
+    process_data()
+    analyze_data()
+    pre_process()
+    update_log()
+
+    return {"status": "success"}
+
+
+# Load data if last update is more than 1 hour and Recommendation
+@app.get("/recommendation-load-update/{user_id}")
+async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
+    if load_log():
+        call_api()
+        aggregate_data()
+        process_data()
+        analyze_data()
+        pre_process()
+        update_log()
+
+    if num_of_rec:
+        recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
+    else:
+        recommendation, user_stat = get_rec(user_id, num_of_rec=5)
+    return {"recommendations": recommendation}
