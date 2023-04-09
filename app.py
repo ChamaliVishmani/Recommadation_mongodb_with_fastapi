@@ -1,18 +1,13 @@
 import os
 from datetime import datetime, timedelta
-from urllib import request
+from typing import List
 
-import pandas as pd
-
-from fastapi import FastAPI, Body, HTTPException, status
-from fastapi.responses import Response, JSONResponse
-from fastapi.encoders import jsonable_encoder
-from pydantic import BaseModel, Field, EmailStr
-from bson import ObjectId
-from typing import Optional, List
 import motor.motor_asyncio
-
+import pandas as pd
 import requests
+from bson import ObjectId
+from fastapi import FastAPI
+from pydantic import BaseModel, Field
 
 # show all columns
 pd.set_option('display.max_columns', None)
