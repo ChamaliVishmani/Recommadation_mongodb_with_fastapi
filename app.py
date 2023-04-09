@@ -1,4 +1,6 @@
 import os
+from datetime import datetime
+
 import pandas as pd
 
 from fastapi import FastAPI, Body, HTTPException, status
@@ -25,6 +27,7 @@ client = motor.motor_asyncio.AsyncIOMotorClient(os.environ["MONGODB_URL"])
 db = client.food_test
 
 data_length = 100000
+
 
 class PyObjectId(ObjectId):
     @classmethod
@@ -264,65 +267,6 @@ async def list_feedbacks():
 # 2. for each orderItem get orderedBy and for that get dateOfBirth from users
 # 3. for each orderItem get food_id, food_type, Ingredients from foodDetails by food_name
 
-@app.get("/aggregate", response_description="Aggregate data", response_model=List[OrderModel])
-async def aggregate_data():
-    orders = await db["orders"].find().to_list(data_length)
-    # orderItemWithQuantities = await db["orderItemWithQuantities"].find().to_list(1000)
-    # foodDetails = await db["foodDetails"].find()
-    # users = await db["users"].find()
-    # feedbacks = await db["feedbacks"].find()
-
-    print(orders)
-
-    # # 1. Aggregate orders with orderItemWithQuantities
-    # for order in orders:
-    #     for orderItem in orderItemWithQuantities:
-    #         if orderItem.orderId == order.id:
-    #             order.orderItemWithQuantities.append(orderItem)
-    #
-    # # 2. for each orderItem get orderedBy and for that get dateOfBirth from users
-    # for order in orders:
-    #     for orderItem in order.orderItemWithQuantities:
-    #         for user in users:
-    #             if order.orderedBy == user.id:
-    #                 orderItem.orderedBy = user
-    #                 break
-    #
-    # # 3. for each orderItem get food_id, food_type, Ingredients from foodDetails by food_name
-    # for order in orders:
-    #     for orderItem in order.orderItemWithQuantities:
-    #         for foodDetail in foodDetails:
-    #             if orderItem.food == foodDetail.food:
-    #                 orderItem.food_id = foodDetail.id
-    #                 orderItem.food_type = foodDetail.food_type
-    #                 orderItem.Ingredients = foodDetail.Ingredients
-    #                 break
-    #
-    # # 4. for each orderItem get food_rating from feedbacks
-    # for order in orders:
-    #     for orderItem in order.orderItemWithQuantities:
-    #         for feedback in feedbacks:
-    #             if orderItem.id == feedback.orderId:
-    #                 orderItem.food_rating = feedback.feedback
-    #                 break
-    #
-    # # convert to dataframes
-    # orders_df = pd.DataFrame(orders)
-    # orderItemWithQuantities_df = pd.DataFrame(orderItemWithQuantities)
-    # foodDetails_df = pd.DataFrame(foodDetails)
-    # users_df = pd.DataFrame(users)
-    # feedbacks_df = pd.DataFrame(feedbacks)
-
-    # merge dataframes
-    # df = pd.merge(orders_df, orderItemWithQuantities_df, left_on='id', right_on='orderId')
-    # df = pd.merge(df, foodDetails_df, left_on='food', right_on='food')
-    # df = pd.merge(df, users_df, left_on='orderedBy', right_on='id')
-    # df = pd.merge(df, feedbacks_df, left_on='id', right_on='orderId')
-    #
-
-    # print(orders_df)
-    return orders
-
 
 #   {
 #     "_id": "64315e59362c27c707fe156b",
@@ -395,7 +339,7 @@ def call_api():
         print(df.head())
 
 
-def process_data():
+def aggregate_data():
     # read csv
     orderItemWithQuantities_df = pd.read_csv(save_path + "orderItemWithQuantities.csv")
     orders_df = pd.read_csv(save_path + "orders.csv")
@@ -432,23 +376,12 @@ def process_data():
     print("users_df: ", users_df.columns)
     print("feedbacks_df: ", feedbacks_df.columns)
 
-
     # add orders_df to orderWithQuantities_df by id to orderID
     df = pd.merge(orderItemWithQuantities_df, orders_df, left_on='orderID', right_on='_id')
 
-    # save to csv
-    df.to_csv(save_path + "aggregate.csv", index=False)
-
-
-    # load csv
-    # df = pd.read_csv(save_path + "aggregate.csv")
-    # check if the merge is correct by comparing orderID and and remove _id_y
-    # if _id exists in orderID then drop it
     if '_id' in df.columns:
         print(df[df['orderID'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
-    # save to csv
-    df.to_csv(save_path + "aggregate-1.csv", index=False)
 
     # add foodDetails_df to df by id to food
     df = pd.merge(df, foodDetails_df, left_on='food', right_on='_id')
@@ -456,35 +389,95 @@ def process_data():
         print(df[df['food'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
 
-    df.to_csv(save_path + "aggregate-2.csv", index=False)
-
     # add users_df to df by id to orderedBy
     df = pd.merge(df, users_df, left_on='orderedBy', right_on='_id')
     if '_id' in df.columns:
         print(df[df['orderedBy'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
 
-    df.to_csv(save_path + "aggregate-3.csv", index=False)
-
     # add feedbacks_df to df by id to orderID
     df = pd.merge(df, feedbacks_df, left_on='orderID', right_on='orderID')
-    df.to_csv(save_path + "aggregate-4.csv", index=False)
     if '_id' in df.columns:
         print(df[df['orderID'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
 
-    df.to_csv(save_path + "aggregate-5.csv", index=False)
-
-
-
     # save to csv
     df.to_csv(save_path + "aggregate.csv", index=False)
-
 
     print("\n\nName of the file: aggregate")
     print(df.head())
 
 
+def process_data():
+    # load csv
+    df = pd.read_csv(save_path + "aggregate.csv")
+
+    # convert dateOfBirth to age
+    df['dateOfBirth'] = pd.to_datetime(df['dateOfBirth'])
+    print(df['dateOfBirth'].head())
+    # now date in 2002-08-30 format
+    from datetime import datetime
+
+    now = datetime.now().strftime("%Y-%m-%d")
+
+    df['age'] = pd.to_datetime(now) - df['dateOfBirth']
+    df.drop(columns=['dateOfBirth'], inplace=True)
+
+    # convert age to years (int)
+    df['age'] = df['age'].dt.days / 365
+    df['age'] = df['age'].astype(int)
+
+    # save to csv
+    df.to_csv(save_path + "processed.csv", index=False)
+
+def analyze_data():
+    # load csv
+    df = pd.read_csv(save_path + "processed.csv")
+
+    # data types
+    print(df.dtypes)
+
+    # null values
+    print(df.isnull().sum())
+
+    # duplicate values
+    print(df.duplicated().sum())
+
+    # unique values
+    print(df.nunique())
+
+    # describe
+    print(df.describe())
+
+
+def pre_process():
+    # load csv
+    df = pd.read_csv(save_path + "processed.csv")
+
+    # remove column if 75% of the values are null
+    df.dropna(thresh=len(df) * 0.25, axis=1, inplace=True)
+
+    # remove null values
+    df.dropna(inplace=True)
+
+    # remove null values
+    df.dropna(inplace=True)
+
+    # remove duplicate values
+    df.drop_duplicates(inplace=True)
+
+
+    # save to csv
+    df.to_csv(save_path + "pre_processed.csv", index=False)
+
+
+# def
+
+
 if __name__ == "__main__":
     # call_api()
-    process_data()
+    # aggregate_data()
+    # process_data()
+    # analyze_data()
+    pre_process()
+
