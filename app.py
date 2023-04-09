@@ -473,11 +473,21 @@ def pre_process():
 
 # def
 
+from recommand import get_rec
 
+# my_profile = "64315d86362c27c707fe155c"
+my_profile = "64315d86362c27c707fe152z"
+#
 if __name__ == "__main__":
     # call_api()
     # aggregate_data()
     # process_data()
     # analyze_data()
-    pre_process()
+    # pre_process()
+    recommendation = get_rec(my_profile)
+
+    if recommendation is None:
+        print("No recommendation found")
+    else:
+        print(recommendation)
 
