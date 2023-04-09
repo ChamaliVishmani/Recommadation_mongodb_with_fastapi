@@ -1,0 +1,1332 @@
+_id,food_name,food_type,food_cuisine,ingredients
+64315e59362c27c707fe156b,Pol Roti with chili salad ,Vegetarian,Sri Lankan,"Flour
+Coconut
+Onion
+Green chili
+Sri Lankan spices"
+64315e59362c27c707fe156c,Hoppers,Vegetarian,Sri Lankan,"Rice flour
+Yeast
+Coconut milk
+Sugar
+Salt
+"
+64315e59362c27c707fe156d,Kottu Roti,Vegetarian,Sri Lankan,"Flour
+yeast"
+64315e59362c27c707fe156e,Vegitable Kottu,Vegetarian,Sri Lankan,"Flour
+Yeast
+Water
+Vegitables
+Sri Lankan spices"
+64315e59362c27c707fe156f,Fish cutlet,Non-vegetarian,Sri Lankan,"Fish
+Vegitables
+Coconut oil
+Vegitables
+Bread powder
+Sri Lankan spices"
+64315e59362c27c707fe1570,Fish rice and curry ,Non-vegetarian,Sri Lankan,"Rice 
+Vegitables
+Coconut oil
+Fish
+Sri Lankan spices
+"
+64315e59362c27c707fe1571,Fish Roti,Non-vegetarian,Sri Lankan,"Flour
+Fish
+Vegitables
+Coconut oil
+Yeast"
+64315e59362c27c707fe1572,Vegitable Roti,Vegetarian,Sri Lankan,"Flour
+Vegitables
+Coconut oil
+Yeast
+Sri Lankan spices"
+64315e59362c27c707fe1573,Sambol,Vegetarian,Sri Lankan,"Sri Lankan spices
+Coconut 
+"
+64315e59362c27c707fe1574,string hoppers,Vegetarian,Sri Lankan,"Rice flour
+"
+64315e59362c27c707fe1575,Dhal curry ,Vegetarian,Sri Lankan,"Dhal
+Sri Lankan Spices"
+64315e59362c27c707fe1576,Chana masala ,Vegetarian,Indian,"Chickpea
+Vegetable
+Onion
+Garam masala
+Garlic
+Chili pepper
+Tomato
+Coriander
+Cumin
+Ginger
+Salt"
+64315e59362c27c707fe1577,Palak paneer,Vegetarian,Indian,"Paneer cheese
+Spinach
+Butter
+Onion
+Garam masala
+Garlic
+Tomato
+Chili pepper
+Cream
+Cumin
+Singer
+Salt
+Dhaniya Powder
+Fenugreek leaves
+"
+64315e59362c27c707fe1578,Chickpea curry,Vegetarian,Indian,"Oil
+Garlic
+Salt
+Peper
+Chickpeas
+Coconut milk
+Curry leaves"
+64315e59362c27c707fe1579,Jeera rice,Vegetarian,Indian,"Cinnoman
+Bay leaf
+Cloves
+Green cardomom
+Basmathi rice
+Cumin seeds"
+64315e59362c27c707fe157a,Jeera Alo,Vegetarian,Indian,"Potato
+Cumin
+Chili pepper
+Coriander
+Salt
+Dhaniya Powder
+Chili powder
+Lemon
+Textured vegetable protein"
+64315e59362c27c707fe157b,Malai kofta,Vegetarian,Indian,"Tomato
+Onion
+Salt
+Garlic
+Cashews
+Ginger
+Oil
+Butter
+Bay leaf
+Heavy cream
+Coriander powder
+Cloves
+Cinnamon
+Cardamoms
+Gram masala
+Ginger"
+64315e59362c27c707fe157c,Mutton korma,Non-vegetarian,Indian,"Mutton
+Curd
+Suffron
+Salt
+Ginger
+Garlic
+Oil
+Ghee
+Cashews
+"
+64315e59362c27c707fe157d,Pina colada with pork ribs,Non-vegetarian,Indian,"Pork
+Oil
+Pine apple
+Salt
+Jaggery
+Giner
+Mint leaves"
+64315e59362c27c707fe157e,Thandoori lamb chops,Non-vegetarian,Indian,"Yogurt
+Lamb chops
+Lemon
+Garlic 
+Salt
+Gram masala
+Chili powder
+Turmeric powder
+Ginger"
+64315e59362c27c707fe157f,Keema Samosa with Yogurt Dip,Non-vegetarian,Indian,"Yogurt
+Keema
+Onion
+Hung curd
+Gram masala
+Garlic
+Ginger"
+64315e59362c27c707fe1580,Curried Parmesan Fish Fingers,Non-vegetarian,Indian,"Fish
+Lemon 
+Garlic
+Green chillies
+Basil leaves
+Salt
+Curry powder
+Eggs 
+Oil
+Parmesesan cheese"
+64315e59362c27c707fe1581,Goan Prawn Curry With Raw,Non-vegetarian,Indian,"Coriander seeds
+Cumin seeds
+peppercorns
+turmeric
+Coconut
+Garlic
+Chillies
+Prawns
+Curry leaves
+Coconut oil"
+64315e59362c27c707fe1582,Chicken Malai Kebab,Non-vegetarian,Indian,"Chicken
+Oil
+Coriander leaves
+Butter
+Masala powder
+Fresh cream
+Corn flour
+Garlic
+Salt
+Mozzarella cheese
+Corn flour"
+64315e59362c27c707fe1583,Malabar Chicken Curry,Non-vegetarian,Indian,"Oil
+Onion
+Cloves
+Coconut
+Ginger
+Grand masala
+Pepper
+Chicken
+Cinnamon
+Mustard seeds"
+64315e59362c27c707fe1584,Grilled Chicken Wrap,Non-vegetarian,Indian,"Chicken
+Chili powder
+Garlic
+Cheese
+Corn
+Red bell pepper
+Avocado
+Flour tortilla"
+64315e59362c27c707fe1585,Rosemary Mushroom Risotto,Vegetarian,Italian,"vegetable
+chicken 
+Oil
+Onion
+Rosemary leaves
+Mushrooms
+Arborio rice
+Lemon "
+64315e59362c27c707fe1586,Homemade Vegan Margherita Pizza,Vegetarian,Italian,"White bread flour
+Yeast
+Sugar
+Olive oil
+Tomato sauce
+Passata
+Basil leaves
+Garlic
+Mozzarella cheese
+Chilli oil "
+64315e59362c27c707fe1587,Crostini,Vegetarian,Italian,"French baguettes
+Olive oil
+Salt
+Black Pepper"
+64315e59362c27c707fe1588,Garlic Rosemary Herb Focaccia,Vegetarian,Italian,"Yeast
+Sugar
+Salt
+Olive oil
+Bread flour"
+64315e59362c27c707fe1589,Tuscan White Bean Salad,Vegetarian,Italian,"Cannellini
+Vegitables
+Cherry tomatoes
+Onions
+Parsley
+Mint leaves
+Lemon
+Cheese
+Pepper
+Olive oil"
+64315e59362c27c707fe158a,Italian Giardiniera ,Vegetarian,Italian,"Green bell peppers
+Red bell peppers
+Jalapeno peppers
+Celery stalk
+Carrot
+Onion
+Cauliflower
+Salt
+Green olives
+Garlic
+Dried oregano
+Red pepper
+Black pepper
+White vinegar
+Olive oil"
+64315e59362c27c707fe158b,Italian Farro Salad,Vegetarian,Italian,"Farro
+Feta cheese
+Dried Tomatoes
+Cucumber
+Cherry tomatoes
+Peas
+Parsey
+Olive oil
+Honey
+Red wine vinegar"
+64315e59362c27c707fe158c,Chicken Milanese,Non-vegetarian,Italian,"Eggs
+Salt
+Black pepper
+Flour
+Bread crumbs
+Chicken
+Vegetable oil
+Lemon"
+64315e59362c27c707fe158d,Tuscan Lamb Shanks,Non-vegetarian,Italian,"Lamb shanks
+Salt
+Pepper
+Olive oil
+Garlic
+Tomatoes
+Chicken
+Olives
+Fresh rosemary
+Cannellini beans
+Green peas
+Parsley"
+64315e59362c27c707fe158e,Pasta Bake with Sausage,Non-vegetarian,Italian,"Olive oil
+Pork sausages
+Onion
+Garlic
+Chilli
+Tomatoes
+Pasta "
+64315e59362c27c707fe158f,Creamy lemon chicken piccata,Non-vegetarian,Italian,"Chicken
+Salt
+Peper
+Folour
+Butter
+Olive oil
+Lemons
+Heavy cream
+Capers
+Parsley
+Pasta
+"
+64315e59362c27c707fe1590,Creamy tuscan shrimp,Non-vegetarian,Italian,"Salted butter
+Garlic
+Prawns
+Onion
+White wine
+Tomato
+Salt
+Pepper
+Spinach leaves
+2/3 cup fresh grated Parmesan cheese
+Cornflour
+Italian herbs
+Parsley"
+64315e59362c27c707fe1591,Creamy Garlic Salmon,Non-vegetarian,Italian,"Salmon
+Salt
+Pepper
+Olive oil
+Butter
+Garlic
+Onion
+White wine 
+Oil
+ Spinach leaves
+Parmesan cheese
+Cornflour
+Parsley"
+64315e59362c27c707fe1592,Chicken Penne Pasta,Non-vegetarian,Italian,"Tomatoes
+Basil
+Olive oil
+Balsamic vinegar
+Garlic
+Black pepper
+Penne pasta
+Chicken
+Salt
+Unsalted butter
+Flour
+White wine
+Heavy cream
+Italian seasoning
+Red pepper
+Parmesan cheese"
+64315e59362c27c707fe1593,Vegetarian Bourguignon,Vegetarian,French,"Braising steak
+Bay leaves
+Red wine
+Oil
+Carrots
+Onions
+Falour
+Tomato
+Butter
+Bacon lardons
+Onions
+Mushrooms
+Parsley"
+64315e59362c27c707fe1594,Sauerkraut Pie,Vegetarian,French,"Bratwurst
+Sauerkraut
+Swiss cheese
+Cheddar cheese
+Biscuit
+Pancake mix
+Garlic
+Milk
+Beer
+Eggs"
+64315e59362c27c707fe1595,Aligot,Vegetarian,French,"Cheese
+Potato
+Cream
+Butter
+Garlic
+Salt
+Mozzarella
+Gruyère cheese
+Black pepper
+Unsalted butter"
+64315e59362c27c707fe1596,Rolled omelet with fine herbs,Vegetarian,French,"Eggs
+Fresh herbs
+Parsley
+Tarragon
+Chives
+Chervil
+Salt
+Black pepper
+Butter"
+64315e59362c27c707fe1597,Leek gratin,Vegetarian,French,"Leeks
+Butter
+Flour
+Salt
+Pepper
+Milk
+Cheese
+Crumbs"
+64315e59362c27c707fe1598,Tartiflette without bacon chunks,Vegetarian,French,"Potatoes
+Leeks
+Onions
+Garlic 
+Cheese
+Cheddar cheese
+Vegetarian bacon
+Soya cream
+Salt
+Pepper"
+64315e59362c27c707fe1599,Gratin dauphinois,Vegetarian,French,"Potato
+Cream
+Milk
+Butter
+Garlic
+Salt
+Gruyère cheese
+Black pepper
+Nutmeg"
+64315e59362c27c707fe159a,Vegetarian pot-au-feu,Vegetarian,French,"Carrots
+Leeks
+Cabbage
+flat-leaf parsley
+Salt
+Black pepper"
+64315e59362c27c707fe159b,Salmon en papillote,Non-vegetarian,French,"salmon
+zucchini
+Garnish
+Lemon
+Olive oil
+Salt
+Black pepper"
+64315e59362c27c707fe159c,Chicken confit,Non-vegetarian,French,"Chicken legs
+Salt
+Black pepper
+Garlic
+Cloves
+Bay leaves
+Olive oil"
+64315e59362c27c707fe159d,Coq au vin,Non-vegetarian,French,"Chicken
+Red Wine
+Onion
+Mushroom
+Garlic
+Butter
+Bacon
+Carrot
+Salt
+Black pepper
+Parsley
+Flour
+Stock
+Olive oil
+Agaricus bisporus
+Thyme"
+64315e59362c27c707fe159e,Cassoulet,Non-vegetarian,French,"Sausage
+Beans
+Chicken
+Navy Beans
+Pork
+Tomato
+Salt
+Onion
+Garlic
+Bacon
+Carrot
+Bread crumbs
+Olive oil
+Black pepper
+Thyme"
+64315e59362c27c707fe159f,Confit de canard,Non-vegetarian,French,"Duck meat
+Salt
+Onion
+Garlic
+Black pepper
+Thyme"
+64315e59362c27c707fe15a0,Boeuf bourguignon,Non-vegetarian,French,"Beef
+Red Wine
+Carrot
+Onion
+Mushroom
+Garlic
+Butter
+Salt
+Bacon
+Flour
+Stock
+Parsley
+Tomato
+Black pepper
+Olive oil
+Thyme"
+64315e59362c27c707fe15a1,Chicken cordon bleu,Non-vegetarian,French,"Chicken
+Cheese
+Ham
+Egg
+Chicken breast
+Bread crumbs
+Butter
+Garlic
+Flour
+Salt
+Black pepper
+Parmesan
+Swiss cheese
+Dijon mustard"
+64315e59362c27c707fe15a2,Chinese Cucumber Salad,Vegetarian,Chinese,"Cucumbers
+Salt
+Chili crisp
+Wine vinegar
+Sugar
+Chili flakes
+Garlic
+Sesame oil
+Sesame seeds"
+64315e59362c27c707fe15a3,Tofu and Broccoli,Vegetarian,Chinese,"Firm tofu
+Vegetable oil
+Sesame oil
+Broccoli florets
+Vegetable broth
+Garlic
+Ginger
+Soy sauce
+Agave syrup
+Rice vinegar
+Sesame seeds
+White rice"
+64315e59362c27c707fe15a4,Garlic Sesame Noodles,Vegetarian,Chinese,"Oil
+Sriracha
+Soy sauce
+Garlic
+Sesame oil
+Ginger
+Rice vinegar
+Honey
+Rice noodles
+"
+64315e59362c27c707fe15a5,Lo Mein,Vegetarian,Chinese,"Sauce
+Vegetable
+Chicken
+Garlic
+Sesame
+Soy Sauce
+Scallion
+Chili pepper
+Oyster Sauce
+Onion
+Cabbage
+Bell Pepper
+Minced garlic"
+64315e59362c27c707fe15a6,Vegetable Chow Mein,Vegetarian,Chinese,"Bell peppers
+Green beans
+Bok choy
+Peas
+Snow peas
+Green onions
+Mushrooms
+Vegetable oil
+Cabbage
+Broccoli 
+Carrot
+Garlic 
+Soy sauce
+Sodium soy sauce
+Oyster sauce
+Noodles 
+Bean sprouts
+Sesame seeds"
+64315e59362c27c707fe15a7,General Tso’s Tofu,Vegetarian,Chinese,"White rice
+Broccoli
+Sesame oil
+Cornstarch
+Garlic
+Ginger
+Rice vinegar 
+Maple syrup
+Soy sauce
+Sesame oil
+Neutral oil
+STIR-FRY
+Onions
+Red chilies"
+64315e59362c27c707fe15a8,Chinese Okra Salad,Vegetarian,Chinese,"Okra
+Salt
+Sesame oil
+Sauce
+Garlic 
+Red pepper
+Onion 
+Soy sauce
+Black vinegar
+Salt
+Sugar
+Sesame oil"
+64315e59362c27c707fe15a9,Mango Chilli Chicken,Non-vegetarian,Chinese,"Chicken
+Avocado
+Mango
+Cilantro 
+Broccoli
+Olive oil 
+Lime juice
+Chili powder
+Cumin 
+Garlic 
+White rice 
+Chicken broth 
+Butter
+Salt
+pepper"
+64315e59362c27c707fe15aa,Garlic Soya Chicken,Non-vegetarian,Chinese,"Chicken 
+Rice wine
+Onion 
+Garlic
+Salt
+Ginger
+Black peppers
+Ccorn starch 
+Cooking oil 
+Sauce
+Brown sugar
+Honey
+Wice wine
+Ginger
+Black pepper
+Dried chilies"
+64315e59362c27c707fe15ab,Chilli Fish,Non-vegetarian,Chinese,"Fish
+Lemon
+Turmeric powder
+Chilli powder
+Pepper powder
+Ginger 
+Curd
+Flour
+Cornflour
+Oil 
+Salt
+Garlic 
+Onion 
+Capsicum
+Green chillies 
+Green chilli sauce
+Tomato
+Soya sauce
+Vinegar
+Sugar
+Chilli powder
+Pepper powder"
+64315e59362c27c707fe15ac,Chinese Chicken Fried Rice,Non-vegetarian,Chinese,"Sesame oil
+Onion
+Chicken
+Soy sauce
+Carrots
+Celery
+Red bell pepper
+Fresh pea pods
+Green bell pepper
+White rice
+Eggs"
+64315e59362c27c707fe15ad,Chinese Mixed Fried Rice,Non-vegetarian,Chinese,"Rice
+Chicken
+Prawns
+Sausages
+Egg
+Vegetable
+Sauce
+Garlic
+Onion
+Chili pepper
+Soy Sauce
+Scallion"
+64315e59362c27c707fe15ae,Vegan Poke Bowl ,Vegetarian,Japanese,"Tamari
+Soy sauce
+Rice vinegar
+Lime
+Sambal oelek
+Sesame oil
+Garlic
+Ginger
+Cucumber
+Cabbage
+Avocado
+Sesame seeds
+Cilantro
+Rice 
+Dynamite Sauce"
+64315e59362c27c707fe15af,Kabocha Miso Soup,Vegetarian,Japanese,"Kabocha 
+Shimeji mushrooms
+White sesame seeds
+Dashi"
+64315e59362c27c707fe15b0,Vegetarian Japanese Curry,Vegetarian,Japanese,"Cauliflower
+Corn
+Green beans
+Okra
+Zcchini
+Crimini mushroom
+Portobello mushroom
+Shiitake mushroom
+"
+64315e59362c27c707fe15b1,Teriyaki Tofu,Vegetarian,Japanese,"Tofu
+Soy sauce
+Canola oil
+Cornstarch
+White peppe
+Teriyaki Sauce
+brown sugar
+Rice vinegar
+Dry sherry
+Sesame oil
+Ginger
+Garlic
+Rice
+Scallions
+"
+64315e59362c27c707fe15b2,Kabocha Gratin,Vegetarian,Japanese,"Butter
+Kabocha 
+Garlic
+Onion
+Oyster mushrooms
+Shimeji mushrooms 
+Olive oil
+Miso
+Salt
+Black pepper
+Gruyere cheese
+Panko
+Elbow macaroni 
+White Sauce
+Unsalted butter
+Flour
+Milk (warm)
+Pepper powder
+Nutmeg 
+Parsley "
+64315e59362c27c707fe15b3,Inari Sushi,Vegetarian,Japanese,"Rice
+Kombu 
+Rice vinegar
+Sugar
+Salt
+Sesame seeds
+Inari age 
+Ginger 
+Shiso leaves"
+64315e59362c27c707fe15b4,Soba Noodle Salad,Vegetarian,Japanese,"Soba noodle
+Onions
+Cilantro
+W sesame seeds
+For the Dressing
+Neutral-flavored oil
+Sesame oil
+Red pepper
+Honey
+Soy sauce"
+64315e59362c27c707fe15b5,Vegan Miso Soup,Vegetarian,Japanese,"Vegetables 
+Sheet nori 
+Yellow miso paste 
+Green chard 
+Onion
+Tofu "
+64315e59362c27c707fe15b6, Yaki Onigiri,Vegetarian,Japanese,"Rice 
+Salt
+Neutral-flavored oil
+Soy sauce"
+64315e59362c27c707fe15b7,Sushi,Non-vegetarian,Japanese,"Rice
+Japanese cuisine
+Nori
+Wasabi
+Soy sauce
+Cucumber
+Sumeshi
+Salt
+Avocado
+Rice vinegar
+Sushi rice
+Nori seaweed"
+64315e59362c27c707fe15b8,Sashimi,Non-vegetarian,Japanese,"Soy sauce
+Sesame
+Wasabi
+Sushi grade fish"
+64315e59362c27c707fe15b9,Unagi ,Non-vegetarian,Japanese,"Mirin
+Sake
+Sugar
+Soy sauce
+Eels"
+64315e59362c27c707fe15ba,Tempura,Non-vegetarian,Japanese,"Shrimp
+Vegetable
+Frying
+Flour
+Deep frying
+Eggs
+Soy Sauce"
+64315e59362c27c707fe15bb,Yakitori,Non-vegetarian,Japanese,"Chicken
+Sake
+Garlic
+Soy Sauce
+Mirin
+Scallion"
+64315e59362c27c707fe15bc,Tempura udon,Non-vegetarian,Japanese,"Vegetables
+Frozen udon noodles
+Dashi powder
+Mirin
+Soy sauce
+Sugar, optional
+Fsh cake
+Onions
+Chile flakes"
+64315e59362c27c707fe15bd,Hitsumabushi,Non-vegetarian,Japanese,"Dashi
+Kobucha
+Unagi
+Unagi Sauce 
+Rice
+Onion
+Sprig mitsuba
+White sesame seeds
+Sansho pepper"
+64315e59362c27c707fe15be,Chankonabe,Non-vegetarian,Japanese,"Salt
+Chicken
+Miso
+Dashi
+Japanese cuisine
+Soy Sauce
+Udon
+Pork
+Noodle
+Tofu
+Garlic
+Napa cabbage
+Sake
+Egg
+Mirin
+Daikon
+Bouillon
+Ginger
+Ground meat
+Carrot
+Stock
+Scallion
+Leek
+Juice
+Enoki
+"
+64315e59362c27c707fe15bf,Tofu Pad Thai,Vegetarian,Tai,"Tamarind paste
+Lime
+Coconut aminos 
+Sugar
+Chili garlic sauce
+Vegetarian Fish Sauce 
+Sesame oil
+Chili flakes 
+Garlic
+Bean sprouts
+Peanuts
+Pad Thai rice noodles
+Peanut sauce
+Carrot
+Cilantro
+Chili Garlic Sauce"
+64315e59362c27c707fe15c0,Thai Coconut Rice,Vegetarian,Tai,"Rice 
+Coconut milk 
+White sugar
+Salt
+Pandan leaves
+Lime leaves 
+Coconut "
+64315e59362c27c707fe15c1,Peanut Sauce,Vegetarian,Tai,"Sauce
+Peanut
+Soy Sauce
+Chili pepper
+Coconut milk
+Garlic
+Cream"
+64315e59362c27c707fe15c2,Thai Pineapple Fried Rice,Vegetarian,Tai,"Coconut oil
+Eggs
+Salt
+Pineapple
+Red bell pepper
+Onions 
+Garlic
+Raw
+Cashews
+Rice
+Soy sauce
+Chili garlic sauce
+Lime
+Cilantro leaves"
+64315e59362c27c707fe15c3,Thai Fruit Salad,Vegetarian,Tai,"Pineapple
+Banana
+Mango
+Lychee fruit
+Star fruit
+Strawberries
+Coconut milk
+Lime 
+Sugar"
+64315e59362c27c707fe15c4,Spicy Thai Noodles,Vegetarian,Tai,"Pasta
+Red pepper
+Vegetable oil
+Sesame oil
+Chili paste
+Soy sauce
+Honey
+Carrots
+Peanuts
+Cilantro
+Sriracha
+Sesame seeds "
+64315e59362c27c707fe15c5,Thai Pumpkin Soup,Vegetarian,Tai,"Pumpkin 
+Sunflower oil
+Onion
+Ginger
+Lemongrass
+Thai red curry paste
+Coconut milk
+Vegetable stock
+Lime
+Sugar
+Red chilli"
+64315e59362c27c707fe15c6,Sesame Cucumber Salad,Vegetarian,Tai,"Cucumbers
+Rice vinegar
+Sesame oil
+Sugar
+Soy sauce
+Salt
+Sesame seeds
+Red pepper "
+64315e59362c27c707fe15c7,Tom Yum Prawns,Non-vegetarian,Tai,"Peanut oil
+Garlic
+Ginger
+Lemongrass
+Onions,
+Sambal
+Caster sugar
+Lime leaves
+Lime
+Fish sauce
+Massel chicken style liquid stock
+Tomatoes
+Prawns
+Dried pad Thai rice noodles
+Coriander leaves"
+64315e59362c27c707fe15c8,Prawn And Pork On Sugarcane Sticks,Non-vegetarian,Tai,"Pork 
+Prawns
+Cornflour
+Egg
+Lime 
+Sugar
+Fish sauce
+Lemongrass
+Ginger
+Red chilli
+Lemon
+Sugarcane,
+Vegetable oil "
+64315e59362c27c707fe15c9,Chicken With Chillies & Cashews,Non-vegetarian,Tai,"Chicken
+Salt
+Pepper
+Egg
+Cornstarch
+Chinese Chilli Recipe
+Onions
+Cashew nuts
+Onion leaves
+Oil "
+64315e59362c27c707fe15ca,Chicken Satay With Peanut Sauce,Non-vegetarian,Tai,"Coconut milk
+Sodium soy sauce
+Yellow curry powder
+Turmeric
+Garlic
+Ginger
+Sugar
+Fish sauce
+Chicken
+Canola oil
+Salt 
+Black pepper
+Peanut butter
+Lime
+Sugar
+Garlic sauce"
+64315e59362c27c707fe15cb,Stir Fried Prawns,Non-vegetarian,Tai,"Prawns
+Garlic
+Ginger
+Onion
+Snow peas
+Broccolini
+Light soy
+Sesame oil
+Chinease wine
+Peper
+Oyster sauce"
+64315e59362c27c707fe15cc,Thai turkey burgers,Non-vegetarian,Tai,"Ground turkey
+Shallots
+Lemongrass
+Ginger
+Garlic
+Lime zest
+Cilantro"
+64315e59362c27c707fe15cd,Thai chicken curry,Non-vegetarian,Tai,"Coconut oil
+Onion
+Chicken
+Garlic
+Ginger 
+Ground coriander 
+Coconut milk
+Carrots
+Thai red curry paste 
+Fresh spinach
+Lime 
+Brown sugar
+Cilantro "
+64315e59362c27c707fe15ce,Ital Stew,Vegetarian,American,"Pumpkin
+Carrot
+Sweet potato
+Plantain
+Dasheen 
+Cho cho 
+Coconut milk
+Thyme
+Coriander
+Onion
+Scallion
+Tomato
+Bay leaves
+Black pepper
+Turmeric
+Pimento berries 
+Scotch bonnet"
+64315e59362c27c707fe15cf,Maque Choux,Vegetarian,American,"Maize
+Butter
+Onion
+Bell Pepper
+Tomato
+Cream
+Garlic
+Salt
+Minced garlic
+Black pepper
+Celery"
+64315e59362c27c707fe15d0,Festival,Vegetarian,American,"Flour
+Fine cornmeal
+Brown sugar
+Baking powder
+Salt
+Milk"
+64315e59362c27c707fe15d1,Fried Green Tomatoes,Vegetarian,American,"Green tomatoes
+Eggs
+Milk
+Flour
+Cornmeal
+Bread crumbs
+Salt
+Black pepper
+Vegetable oil"
+64315e59362c27c707fe15d2,Avocado Toast,Vegetarian,American,"Bread
+Avocado
+Salt"
+64315e59362c27c707fe15d3,Classic Apple Pie,Vegetarian,American,"Apples
+Sugar
+Lemon
+Flour
+Cinnamon
+Salt
+Disks Pie Dough
+Egg
+Vegetable shortening
+Apple cider vinegar
+Butter"
+64315e59362c27c707fe15d4,Broccoli quinoa cakes,Vegetarian,American,"Quinoa
+Broccoli
+Scallion
+Basil, dill
+Italian parsley
+Egg
+Salt
+Pepper
+Garli
+Almond flour 
+Cheese
+Oil "
+64315e59362c27c707fe15d5,Pastrami Sandwich,Non-vegetarian,American,"Butter
+Bread 
+Provolone
+Swiss cheese 
+Pastrami 
+Sauerkraut 
+Mayonnaise 
+Mustard "
+64315e59362c27c707fe15d6,Chicken Over Rice,Non-vegetarian,American,"chicken
+Lemon 
+Oregano
+Coriander seed
+Garlic
+Olive oil
+Salt 
+Black pepper
+Canola oil
+Butter
+Turmeric
+Ground cumin
+Basmati rice
+Mayonnaise
+Greek yogurt
+Sugar
+White vinegar
+Parsley
+Tomato"
+64315e59362c27c707fe15d7,Corn Dog,Non-vegetarian,American,"Flour
+Egg
+Cornmeal
+Salt
+Baking Powder
+Buttermilk
+Sausage"
+64315e59362c27c707fe15d8,Beef Brisket,Non-vegetarian,American,"Garlic
+Onion 
+Paprika
+Salt 
+Black pepper
+Cumin
+Ground Chili 
+Beef
+Barbecue sauce
+Garlic
+Brown sugar
+Worcestershire sauce"
+64315e59362c27c707fe15d9,Chicken A La King,Non-vegetarian,American,"Butter
+Mushrooms 
+Flour
+Chicken
+Milk
+Egg 
+Heavy creamy
+Frozen peas
+Drained pimientos
+"
+64315e59362c27c707fe15da,Steak Diane,Non-vegetarian,American,"Beef
+Salt
+Beef broth
+Worcestershire sauce
+Dijon mustard
+Tomato paste
+Butter
+Cognac 
+Heavy cream
+Black pepper
+Chives"
+64315e59362c27c707fe15db,Skordalia ,Vegetarian,Greek,"Garlic
+Potatoa
+Olive oil
+Salt
+Lemon
+Black pepper
+Juice
+Red wine vinegar"
+64315e59362c27c707fe15dc,Greek Lemon Potatoes ,Vegetarian,Greek,"Potatoes
+Chicken stock
+Olive oil
+Lemon
+Garlic 
+Oregano
+Salt
+"
+64315e59362c27c707fe15dd,Chickpea Gyro   ,Vegetarian,Greek,"Chickpeas 
+Olive oil 
+Paprika
+Black pepper 
+Ccayenne peppe
+Salt
+Flatbreads
+Tzatziki 
+Onion 
+Lettuce
+Tomato"
+64315e59362c27c707fe15de,Jackfruit Gyro ,Vegetarian,Greek,"Olive oil
+Onion
+Garlic
+Ground cloves
+Cinnamon
+Ground cumin
+Dry oregano
+Chilli powe
+Tomato 
+jackfruit 
+Soy sauce
+Maple syrup
+White pepper
+Apple cider vinegar
+cucumber
+sweet cherry tomatoes"
+64315e59362c27c707fe15df,Greek Green Beans ,Vegetarian,Greek,"Green beans
+Olive oil
+Onions
+Garlic
+Tomatoes
+Sugar
+Parsley
+Salt
+Pepper"
+64315e59362c27c707fe15e0,Spanakopita,Vegetarian,Greek,"Spinach
+Filo pastry
+Cheese
+Feta
+Egg
+Ricotta
+Butter
+Onion
+Olive oil
+Garlic
+Dill
+Scallion"
+64315e59362c27c707fe15e1,Tzatziki ,Vegetarian,Greek,"Cucumber 
+Greek yogurt
+Olive oil
+Fresh mint 
+Lemon 
+Garlic
+Salt"
+64315e59362c27c707fe15e2,Greek Chickpea Soup,Vegetarian,Greek,"Chickpeas
+Onion
+Olive oil
+Bay leaf
+Oregano
+Pepper
+Salt
+Lemons
+Flour
+Vegetable stock"
+64315e59362c27c707fe15e3,Briam,Vegetarian,Greek,"Potatoes 
+Zucchini squash
+Pepper
+Oregano
+Dried rosemary 
+Parsley
+Garlic
+Olive oil
+Tomatoes
+Onion"
+64315e59362c27c707fe15e4,Giouvetsi,Non-vegetarian,Greek,"Orzo
+Pasta
+Cheese
+Tomato
+Onion
+Garlic
+Beef
+Olive oil
+Feta
+Salt
+Tomato paste
+Black pepper
+Red Wine
+Cinnamon stick"
+64315e59362c27c707fe15e5,Moussaka,Non-vegetarian,Greek,"Eggplant
+Potato
+Ground meat
+Cheese
+Tomato
+Egg
+Mutton
+Onion
+Garlic
+Salt
+Olive oil
+Milk
+Flour
+Butter
+Black pepper
+Ground beef
+Parmesan
+Ground cinnamon
+Fresh oregano"
+64315e59362c27c707fe15e6,Gemista,Non-vegetarian,Greek,"Rice
+Tomato
+Ground meat
+Olive oil
+Eggplant
+Onion
+Salt
+Potato
+Garlic
+Zucchini
+Parsley
+Bell Pepper
+Black pepper
+Tomato paste
+Green bell pepper
+Textured vegetable protein
+Mint
+"
+64315e59362c27c707fe15e7,Souvlaki,Non-vegetarian,Greek,"Greek cuisine
+Chicken
+Tomato
+Tomato
+Yogurt
+Lemon
+Onion
+Olive oil
+Salt
+Black pepper
+Juice
+Fresh oregano
+Minced garlic"
+64315e59362c27c707fe15e8,Stifado,Non-vegetarian,Greek,"Beef
+Onions
+Olive oil
+Red wine
+Red wine vinegar
+Cognac
+Tomatoes
+Bay leaf
+Allspice berries
+Nutmeg
+Pepper
+Salt"
+64315e59362c27c707fe15e9,Soutzoukakia,Non-vegetarian,Greek,"Olive oil
+Ground meat
+Bread
+Tomato
+Tomato Sauce
+Beef
+Onion
+Egg
+Garlic
+Salt
+Cumin
+Parsley
+Black pepper
+Bread crumbs
+Tomato paste
+Cinnamon
+Bay leaf
+Ground beef"
+64315e59362c27c707fe15ea,Kleftiko,Non-vegetarian,Greek,"Leg of lamb
+Onions
+Bell peppers (green, red, orange)
+Garlic
+Mustard
+Lemon
+Dried oregano
+Olive oil
+Dry white wine
+Yellow cheese
+Potatoes
+Tomato
+Pepper
+Salt
+"
