@@ -12,4 +12,11 @@ pip install -r requirements.txt
 uvicorn app:app --reload
 ```
 
-Now you can load http://localhost:8000/docs in your browser ... but there won't be much to see until you've inserted some data.
+Now you can load http://localhost:8000/docs in your browser ... but there won't be much to see until you've inserted
+some data.
+
+You can test with,
+
+    existing_profile = "64315d86362c27c707fe155c"
+
+    new_profile = "64315d86362c27c707fe152z"

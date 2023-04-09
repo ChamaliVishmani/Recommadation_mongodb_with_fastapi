@@ -6,13 +6,24 @@ import motor.motor_asyncio
 import pandas as pd
 import requests
 from bson import ObjectId
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
 # show all columns
 pd.set_option('display.max_columns', None)
 
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # load environment variables
 from dotenv import load_dotenv
@@ -324,7 +335,11 @@ def call_api():
 
     for url in url_list:
         url = base_url + url
-        response = requests.get(url).json()
+        print("URL: ", url)
+        try:
+            response = requests.get(url).json()
+        except Exception as e:
+            print("Error: ", e)
         # convert to dataframe
         # If using all scalar values, you must pass an index
         df = pd.DataFrame(response)
@@ -482,11 +497,12 @@ def update_log():
 def load_log():
     # load txt
     f = open(save_path + "log.txt", "r")
-    print(f.read())
+    read_data = f.read()
+    print(read_data)
     f.close()
 
     # extract datetime
-    new_datetime = f.read().split("Last updated: ")[1]
+    new_datetime = read_data.split("Last updated: ")[1]
 
     # convert to datetime
     new_datetime = datetime.strptime(new_datetime, "%d/%m/%Y %H:%M:%S")
@@ -499,24 +515,6 @@ def load_log():
 
 
 from recommand import get_rec
-
-my_profile = "64315d86362c27c707fe155c"
-# my_profile = "64315d86362c27c707fe152z"
-
-if __name__ == "__main__":
-    # call_api()
-    # aggregate_data()
-    # process_data()
-    # analyze_data()
-    # pre_process()
-    recommendation, user_stat = get_rec(my_profile, num_of_rec=5)
-
-    if user_stat == 0:
-        print("New user")
-        print(recommendation)
-    else:
-        print("Existing user")
-        print(recommendation)
 
 
 # Recommendation
@@ -534,11 +532,28 @@ async def get_recommendation(user_id: str, num_of_rec: int = 5):
 # Load data and Recommendation
 @app.get("/recommendation-load/{user_id}")
 async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
-    call_api()
+    orderItemWithQuantities = await list_order_items_with_quantities()
+    orders = await list_orders()
+    fooddetails = await list_foods()
+    users = await list_users()
+    feedbacks = await list_feedbacks()
+
+    orderItemWithQuantities = pd.DataFrame(orderItemWithQuantities)
+    orders = pd.DataFrame(orders)
+    fooddetails = pd.DataFrame(fooddetails)
+    users = pd.DataFrame(users)
+    feedbacks = pd.DataFrame(feedbacks)
+
+    orderItemWithQuantities.to_csv(save_path + "orderItemWithQuantities.csv", index=False)
+    orders.to_csv(save_path + "orders.csv", index=False)
+    fooddetails.to_csv(save_path + "fooddetails.csv", index=False)
+    users.to_csv(save_path + "users.csv", index=False)
+    feedbacks.to_csv(save_path + "feedbacks.csv", index=False)
+
     aggregate_data()
     process_data()
-    analyze_data()
     pre_process()
+    update_log()
 
     if num_of_rec:
         recommendation, user_stat = get_rec(user_id, num_of_rec=num_of_rec)
@@ -549,11 +564,27 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
 
 # Load data
 @app.get("/load-data")
-async def load_data():
-    call_api()
+async def load_data(request: Request):
+    orderItemWithQuantities = await list_order_items_with_quantities()
+    orders = await list_orders()
+    fooddetails = await list_foods()
+    users = await list_users()
+    feedbacks = await list_feedbacks()
+
+    orderItemWithQuantities = pd.DataFrame(orderItemWithQuantities)
+    orders = pd.DataFrame(orders)
+    fooddetails = pd.DataFrame(fooddetails)
+    users = pd.DataFrame(users)
+    feedbacks = pd.DataFrame(feedbacks)
+
+    orderItemWithQuantities.to_csv(save_path + "orderItemWithQuantities.csv", index=False)
+    orders.to_csv(save_path + "orders.csv", index=False)
+    fooddetails.to_csv(save_path + "fooddetails.csv", index=False)
+    users.to_csv(save_path + "users.csv", index=False)
+    feedbacks.to_csv(save_path + "feedbacks.csv", index=False)
+
     aggregate_data()
     process_data()
-    analyze_data()
     pre_process()
     update_log()
 
@@ -564,10 +595,26 @@ async def load_data():
 @app.get("/recommendation-load-update/{user_id}")
 async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
     if load_log():
-        call_api()
+        orderItemWithQuantities = await list_order_items_with_quantities()
+        orders = await list_orders()
+        fooddetails = await list_foods()
+        users = await list_users()
+        feedbacks = await list_feedbacks()
+
+        orderItemWithQuantities = pd.DataFrame(orderItemWithQuantities)
+        orders = pd.DataFrame(orders)
+        fooddetails = pd.DataFrame(fooddetails)
+        users = pd.DataFrame(users)
+        feedbacks = pd.DataFrame(feedbacks)
+
+        orderItemWithQuantities.to_csv(save_path + "orderItemWithQuantities.csv", index=False)
+        orders.to_csv(save_path + "orders.csv", index=False)
+        fooddetails.to_csv(save_path + "fooddetails.csv", index=False)
+        users.to_csv(save_path + "users.csv", index=False)
+        feedbacks.to_csv(save_path + "feedbacks.csv", index=False)
+
         aggregate_data()
         process_data()
-        analyze_data()
         pre_process()
         update_log()
 
