@@ -9,6 +9,11 @@ from bson import ObjectId
 from typing import Optional, List
 import motor.motor_asyncio
 
+import requests
+
+# show all columns
+pd.set_option('display.max_columns', None)
+
 app = FastAPI()
 
 # load environment variables
@@ -36,129 +41,14 @@ class PyObjectId(ObjectId):
         field_schema.update(type="string")
 
 
-class StudentModel(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    name: str = Field(...)
-    email: EmailStr = Field(...)
-    course: str = Field(...)
-    gpa: float = Field(..., le=4.0)
+# const foodDetailsSchema = new Schema(
+#     food_id: { type: Schema.Types.ObjectId, ref: "User" },
+#     food_name: { type: String },
+#     food_type: { type: String },
+#     Ingredients: { type: String },
+#   { collection: "foodDetails" }
 
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "name": "Jane Doe",
-                "email": "jdoe@example.com",
-                "course": "Experiments, Science, and Fashion in Nanophotonics",
-                "gpa": "3.0",
-            }
-        }
-
-
-class UpdateStudentModel(BaseModel):
-    name: Optional[str]
-    email: Optional[EmailStr]
-    course: Optional[str]
-    gpa: Optional[float]
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "name": "Jane Doe",
-                "email": "jdoe@example.com",
-                "course": "Experiments, Science, and Fashion in Nanophotonics",
-                "gpa": "3.0",
-            }
-        }
-
-
-# const { Schema, model } = require("mongoose");
-# const Order = require("./order_model");
-# const Food = require("./food_model");
-#
-# const orderItemsSchema = new Schema(
-#   {
-#     orderID: { type: Schema.Types.ObjectId, ref: "Order" },
-#     food: { type: Schema.Types.ObjectId, ref: "Food" },
-#     quanitity: { type: Number },
-#     price: { type: Number },
-#   },
-#   { collection: "orderItemWithQuantities" }
-# );
-#
-# module.exports = model("OrderItemWithQuantity", orderItemsSchema);
-
-@app.post("/", response_description="Add new student", response_model=StudentModel)
-async def create_student(student: StudentModel = Body(...)):
-    student = jsonable_encoder(student)
-    new_student = await db["students"].insert_one(student)
-    created_student = await db["students"].find_one({"_id": new_student.inserted_id})
-    return JSONResponse(status_code=status.HTTP_201_CREATED, content=created_student)
-
-
-@app.get("/", response_description="List all students", response_model=List[StudentModel])
-async def list_students():
-    students = await db["students"].find().to_list(1000)
-    return students
-
-
-# @app.get(
-#     "/{id}", response_description="Get a single student", response_model=StudentModel
-# )
-# async def show_student(id: str):
-#     if (student := await db["students"].find_one({"_id": id})) is not None:
-#         return student
-#
-#     raise HTTPException(status_code=404, detail=f"Student {id} not found")
-
-@app.put("/{id}", response_description="Update a student", response_model=StudentModel)
-async def update_student(id: str, student: UpdateStudentModel = Body(...)):
-    student = {k: v for k, v in student.dict().items() if v is not None}
-
-    if len(student) >= 1:
-        update_result = await db["students"].update_one({"_id": id}, {"$set": student})
-
-        if update_result.modified_count == 1:
-            if (
-                    updated_student := await db["students"].find_one({"_id": id})
-            ) is not None:
-                return updated_student
-
-    if (existing_student := await db["students"].find_one({"_id": id})) is not None:
-        return existing_student
-
-    raise HTTPException(status_code=404, detail=f"Student {id} not found")
-
-
-@app.delete("/{id}", response_description="Delete a student")
-async def delete_student(id: str):
-    delete_result = await db["students"].delete_one({"_id": id})
-
-    if delete_result.deleted_count == 1:
-        return Response(status_code=status.HTTP_204_NO_CONTENT)
-
-    raise HTTPException(status_code=404, detail=f"Student {id} not found")
-
-
-# const foodSchema = new Schema(
-#   {
-#     name: { type: String },
-#     price: { type: Number },
-#     description: { type: String },
-#     image: { type: String },
-#     category: { type: Schema.Types.ObjectId, ref: "FoodCatergory" }, //Get object id from foodCategory_model
-#   },
-#   { collection: "foods" }
-# );
-#
-# module.exports = model("Food", foodSchema);
-
-class FoodModel(BaseModel):
+class FoodDetailsModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     food_name: str = Field(...)
     food_type: str = Field(...)
@@ -179,49 +69,22 @@ class FoodModel(BaseModel):
         }
 
 
-class UpdateFoodModel(BaseModel):
-    name: Optional[str]
-    price: Optional[float]
-    description: Optional[str]
-    image: Optional[str]
-    category: Optional[str]
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "name": "Fish and Chips",
-                "price": "10.0",
-                "description": "Fish and Chips",
-                "image": "image",
-                "category": "category",
-            }
-        }
-
-
 # List all foods
-@app.get("/foods", response_description="List all foods", response_model=List[FoodModel])
+@app.get("/fooddetails", response_description="List all foods", response_model=List[FoodDetailsModel])
 async def list_foods():
     foods = await db["foodDetails"].find().to_list(1000)
     return foods
 
 
 # const orderItemsSchema = new Schema(
-#   {
 #     orderID: { type: Schema.Types.ObjectId, ref: "Order" },
 #     food: { type: Schema.Types.ObjectId, ref: "Food" },
-#     quanitity: { type: Number },
+#     quantity: { type: Number },
 #     price: { type: Number },
-#   },
 #   { collection: "orderItemWithQuantities" }
-# );
-#
-# module.exports = model("OrderItemWithQuantity", orderItemsSchema);
 
 
-class OrderItemWithQuantity(BaseModel):
+class OrderItemWithQuantityModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     orderID: PyObjectId = Field(default_factory=PyObjectId)
     food: str
@@ -243,15 +106,16 @@ class OrderItemWithQuantity(BaseModel):
         }
 
 
-@app.get("/orderItemWithQuantities", response_description="List all order items with quantities",
-         response_model=List[OrderItemWithQuantity])
+@app.get(
+    "/orderItemWithQuantities", response_description="List all order items with quantities",
+    response_model=List[OrderItemWithQuantityModel]
+)
 async def list_order_items_with_quantities():
     order_items_with_quantities = await db["orderItemWithQuantities"].find().to_list(1000)
     return order_items_with_quantities
 
 
 # const orderSchema = new Schema(
-#   {
 #     createDate: { type: String },
 #     createTime: { type: String },
 #     status: { type: String },
@@ -261,17 +125,47 @@ async def list_order_items_with_quantities():
 #     orderType: { type: Schema.Types.ObjectId, ref: "OrderType" },
 #     table: { type: Schema.Types.ObjectId, ref: "Table" },
 #     handleBy: { type: Schema.Types.ObjectId, ref: "Employee" },
-#   },
 #   { collection: "orders" }
-# );
-#
-# module.exports = model("Order", orderSchema);
 
 
-# const { Schema, model } = require("mongoose");
-#
+class OrderModel(BaseModel):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    createDate: str = Field(...)
+    createTime: str = Field(...)
+    status: str = Field(...)
+    orderedBy: PyObjectId = Field(default_factory=PyObjectId)
+    billValue: str = Field(...)
+    discount: str = Field(...)
+    orderType: str = Field(...)
+    table: str = Field(...)
+    handleBy: str = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "createDate": "2021-07-21",
+                "createTime": "18:11:10",
+                "status": "pending",
+                "orderedBy": "60f4d5c5b5f0f0e5e8b2b5c9",
+                "billValue": "100",
+                "discount": "10",
+                "orderType": "60f4d5c5b5f0f0e5e8b2b5c9",
+                "table": "60f4d5c5b5f0f0e5e8b2b5c9",
+                "handleBy": "60f4d5c5b5f0f0e5e8b2b5c9"
+            }
+        }
+
+
+@app.get("/orders", response_description="List all orders", response_model=List[OrderModel])
+async def list_orders():
+    orders = await db["orders"].find().to_list(1000)
+    return orders
+
+
 # const userSchema = new Schema(
-#   {
 #     userID: { type: Schema.Types.ObjectId, ref: "User" },
 #     firstName: { type: String },
 #     lastName: { type: String },
@@ -280,14 +174,10 @@ async def list_order_items_with_quantities():
 #     dateOfBirth: { type: String },
 #     mobileNumber: { type: String },
 #     password: { type: String },
-#   },
 #   { collection: "users" }
-# );
-#
-# module.exports = model("User", userSchema);
 
-class User(BaseModel):
-    userID: str
+class UserModel(BaseModel):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     firstName: str
     lastName: str
     userName: str
@@ -314,58 +204,22 @@ class User(BaseModel):
         }
 
 
-# const { Schema, model } = require("mongoose");
-#
-# const foodDetailsSchema = new Schema(
-#   {
-#     food_id: { type: Schema.Types.ObjectId, ref: "User" },
-#     food_name: { type: String },
-#     food_type: { type: String },
-#     Ingredients: { type: String },
-#   },
-#   { collection: "foodDetails" }
-# );
-
-class FoodDetails(BaseModel):
-    food_id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    food_name: str = Field(...)
-    food_type: str = Field(...)
-    cuisine: str = Field(...)
-    Ingredients: str = Field(...)
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "food_id": "60f4d5c5b5f0f0e5e8b2b5c9",
-                "food_name": "Pizza",
-                "food_type": "Main",
-                "cuisine": "Italian",
-                "Ingredients": "Cheese, Tomato, Onion"
-            }
-        }
+@app.get("/users", response_description="List all users", response_model=List[UserModel])
+async def list_users():
+    users = await db["users"].find().to_list(1000)
+    return users
 
 
-# const { Schema, model } = require("mongoose");
-# const User = require("../models/user_model");
-#
 # const feedbackSchema = new Schema(
-#   {
 #     feedback: { type: String },
 #     userID: { type: Schema.Types.ObjectId, ref: "User" },
 #     orderId: { type: Schema.Types.ObjectId, ref: "Order" },
-#   },
 #   { collection: "feedbacks" }
-# );
-#
-# module.exports = model("Feedback", feedbackSchema);
 
-class Feedback(BaseModel):
+class FeedbackModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    orderID: PyObjectId = Field(default_factory=PyObjectId)
     feedback: str
-    orderId: PyObjectId = Field(default_factory=PyObjectId)
 
     class Config:
         allow_population_by_field_name = True
@@ -374,13 +228,13 @@ class Feedback(BaseModel):
         schema_extra = {
             "example": {
                 "_id": "60f4d5c5b5f0f0e5e8b2b5c9",
-                "feedback": "Good",
-                "orderId": "60f4d5c5b5f0f0e5e8b2b5c9"
+                "orderID": "60f4d5c5b5f0f0e5e8b2b5c9",
+                "feedback": 2
             }
         }
 
 
-@app.get("/feedbacks", response_description="List all feedbacks", response_model=List[Feedback])
+@app.get("/feedbacks", response_description="List all feedbacks", response_model=List[FeedbackModel])
 async def list_feedbacks():
     feedbacks = await db["feedbacks"].find().to_list(100)
     return feedbacks
@@ -398,40 +252,194 @@ async def list_feedbacks():
 # Ingredients    :  foodDetails.Ingredients
 # food_rating    :  feedbacks.feedback
 
+# FoodDetailsModel
+# OrderItemWithQuantityModel
+# OrderModel
+# UserModel
+# FeedbackModel
 
-class OrderModel(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    createDate: str = Field(...)
-    createTime: str = Field(...)
-    status: str = Field(...)
-    orderedBy: PyObjectId = Field(default_factory=PyObjectId)
-    billValue: str = Field(...)
-    discount: str = Field(...)
-    orderType: str = Field(...)
-    table: str = Field(...)
-    handleBy: str = Field(...)
-    orderItemWithQuantities: List[OrderItemWithQuantity]
+# take data from orders, orderItemWithQuantities, foodDetails, users, feedbacks and aggregate them
+# 1. Aggregate orders with orderItemWithQuantities
+# 2. for each orderItem get orderedBy and for that get dateOfBirth from users
+# 3. for each orderItem get food_id, food_type, Ingredients from foodDetails by food_name
 
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "createDate": "2021-07-21",
-                "createTime": "18:11:10",
-                "status": "pending",
-                "orderedBy": "60f4d5c5b5f0f0e5e8b2b5c9",
-                "billValue": "100",
-                "discount": "10",
-                "orderType": "60f4d5c5b5f0f0e5e8b2b5c9",
-                "table": "60f4d5c5b5f0f0e5e8b2b5c9",
-                "handleBy": "60f4d5c5b5f0f0e5e8b2b5c9"
-            }
-        }
-
-
-@app.get("/orders", response_description="List all orders", response_model=List[OrderModel])
-async def list_orders():
+@app.get("/aggregate", response_description="Aggregate data", response_model=List[OrderModel])
+async def aggregate_data():
     orders = await db["orders"].find().to_list(1000)
+    # orderItemWithQuantities = await db["orderItemWithQuantities"].find().to_list(1000)
+    # foodDetails = await db["foodDetails"].find()
+    # users = await db["users"].find()
+    # feedbacks = await db["feedbacks"].find()
+
+    print(orders)
+
+    # # 1. Aggregate orders with orderItemWithQuantities
+    # for order in orders:
+    #     for orderItem in orderItemWithQuantities:
+    #         if orderItem.orderId == order.id:
+    #             order.orderItemWithQuantities.append(orderItem)
+    #
+    # # 2. for each orderItem get orderedBy and for that get dateOfBirth from users
+    # for order in orders:
+    #     for orderItem in order.orderItemWithQuantities:
+    #         for user in users:
+    #             if order.orderedBy == user.id:
+    #                 orderItem.orderedBy = user
+    #                 break
+    #
+    # # 3. for each orderItem get food_id, food_type, Ingredients from foodDetails by food_name
+    # for order in orders:
+    #     for orderItem in order.orderItemWithQuantities:
+    #         for foodDetail in foodDetails:
+    #             if orderItem.food == foodDetail.food:
+    #                 orderItem.food_id = foodDetail.id
+    #                 orderItem.food_type = foodDetail.food_type
+    #                 orderItem.Ingredients = foodDetail.Ingredients
+    #                 break
+    #
+    # # 4. for each orderItem get food_rating from feedbacks
+    # for order in orders:
+    #     for orderItem in order.orderItemWithQuantities:
+    #         for feedback in feedbacks:
+    #             if orderItem.id == feedback.orderId:
+    #                 orderItem.food_rating = feedback.feedback
+    #                 break
+    #
+    # # convert to dataframes
+    # orders_df = pd.DataFrame(orders)
+    # orderItemWithQuantities_df = pd.DataFrame(orderItemWithQuantities)
+    # foodDetails_df = pd.DataFrame(foodDetails)
+    # users_df = pd.DataFrame(users)
+    # feedbacks_df = pd.DataFrame(feedbacks)
+
+    # merge dataframes
+    # df = pd.merge(orders_df, orderItemWithQuantities_df, left_on='id', right_on='orderId')
+    # df = pd.merge(df, foodDetails_df, left_on='food', right_on='food')
+    # df = pd.merge(df, users_df, left_on='orderedBy', right_on='id')
+    # df = pd.merge(df, feedbacks_df, left_on='id', right_on='orderId')
+    #
+
+    # print(orders_df)
     return orders
+
+
+#   {
+#     "_id": "64315e59362c27c707fe156b",
+#     "food_name": "Pol Roti with chili salad ",
+#     "food_type": "Vegetarian",
+#     "food_cuisine": "Sri Lankan",
+#     "ingredients": "Flour\nCoconut\nOnion\nGreen chili\nSri Lankan spices"
+#   },
+
+
+#   {
+#     "_id": "64316a3f362c27c707fe18a9",
+#     "orderID": "64316105362c27c707fe15ec",
+#     "food": "64315e59362c27c707fe1586",
+#     "quantity": 2,
+#     "price": 885
+#   },
+
+
+# {
+#     "_id": "64316ada362c27c707fe20c6",
+#     "createDate": "1970-10-20",
+#     "createTime": "18:11:10",
+#     "status": "pending",
+#     "orderedBy": "64315d86362c27c707fe155c",
+#     "billValue": "774",
+#     "discount": "94",
+#     "orderType": "1",
+#     "table": "2",
+#     "handleBy": "8"
+#   },
+
+
+# {
+#     "_id": "64315d86362c27c707fe1529",
+#     "firstName": "Justin",
+#     "lastName": "Diaz",
+#     "userName": "JustinDiaz",
+#     "email": "Justin.Diaz@gmail.com",
+#     "dateOfBirth": "2005-06-29",
+#     "mobileNumber": "(326)149-8817",
+#     "password": "v^5BXk2C"
+#   },
+
+
+#   {
+#     "_id": "64316b59362c27c707fe2386",
+#     "feedback": "2",
+#     "orderID": null
+#   },
+
+
+base_url = "http://localhost:8000/"
+save_path = "data/"
+
+
+def call_api():
+    url_list = ["orderItemWithQuantities", "orders", "fooddetails", "users", "feedbacks"]
+
+    for url in url_list:
+        url = base_url + url
+        response = requests.get(url).json()
+        # convert to dataframe
+        # If using all scalar values, you must pass an index
+        df = pd.DataFrame(response)
+        # save to csv
+        df.to_csv(save_path + url.split("/")[-1] + ".csv", index=False)
+
+        print("\n\nName of the file: ", url.split("/")[-1])
+        print(df.head())
+
+
+def process_data():
+    # read csv
+    orderItemWithQuantities_df = pd.read_csv(save_path + "orderItemWithQuantities.csv")
+    orders_df = pd.read_csv(save_path + "orders.csv")
+    foodDetails_df = pd.read_csv(save_path + "fooddetails.csv")
+    users_df = pd.read_csv(save_path + "users.csv")
+    feedbacks_df = pd.read_csv(save_path + "feedbacks.csv")
+
+    # rename _id to id in all dataframes
+    # orderItemWithQuantities_df.rename(columns={'_id': 'id'}, inplace=True)
+    # orders_df.rename(columns={'_id': 'id'}, inplace=True)
+    # foodDetails_df.rename(columns={'_id': 'id'}, inplace=True)
+    # users_df.rename(columns={'_id': 'id'}, inplace=True)
+    # feedbacks_df.rename(columns={'_id': 'id'}, inplace=True)
+
+    # keep only required columns
+    # ['_id', 'orderID', 'food']
+    orderItemWithQuantities_df = orderItemWithQuantities_df[['_id', 'orderID', 'food']]
+    # ['_id', 'orderedBy', 'orderType']
+    orders_df = orders_df[['_id', 'orderedBy', 'orderType']]
+    # ['_id', 'food_name', 'food_type', 'food_cuisine', 'ingredients']
+    foodDetails_df = foodDetails_df[['_id', 'food_name', 'food_type', 'food_cuisine', 'ingredients']]
+    # ['_id', 'dateOfBirth']
+    users_df = users_df[['_id', 'dateOfBirth']]
+    # ['_id', 'orderID', 'feedback']
+    feedbacks_df = feedbacks_df[['_id', 'orderID', 'feedback']]
+
+    # print list of columns in each dataframe
+    print("orderItemWithQuantities_df: ", orderItemWithQuantities_df.columns)
+    print("orders_df: ", orders_df.columns)
+    print("foodDetails_df: ", foodDetails_df.columns)
+    print("users_df: ", users_df.columns)
+    print("feedbacks_df: ", feedbacks_df.columns)
+
+
+    # add orders_df to orderWithQuantities_df by id to orderID
+    df = pd.merge(orderItemWithQuantities_df, orders_df, left_on='orderID', right_on='_id')
+
+
+    # save to csv
+    df.to_csv(save_path + "aggregate.csv", index=False)
+
+    print("\n\nName of the file: aggregate")
+    print(df.head())
+
+
+if __name__ == "__main__":
+    # call_api()
+    process_data()
