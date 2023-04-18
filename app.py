@@ -52,19 +52,16 @@ class PyObjectId(ObjectId):
         field_schema.update(type="string")
 
 
-# const foodDetailsSchema = new Schema(
-#     food_id: { type: Schema.Types.ObjectId, ref: "User" },
-#     food_name: { type: String },
-#     food_type: { type: String },
-#     Ingredients: { type: String },
-#   { collection: "foodDetails" }
+# const feedbackSchema = new Schema(
+#     feedback: { type: String },
+#     userID: { type: Schema.Types.ObjectId, ref: "User" },
+#     orderId: { type: Schema.Types.ObjectId, ref: "Order" },
+#   { collection: "feedbacks" }
 
-class FoodDetailsModel(BaseModel):
+class FeedbackModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    food_name: str = Field(...)
-    food_type: str = Field(...)
-    food_cuisine: str = Field(...)
-    ingredients: str = Field(...)
+    orderID: PyObjectId = Field(default_factory=PyObjectId)
+    feedback: str
 
     class Config:
         allow_population_by_field_name = True
@@ -72,18 +69,90 @@ class FoodDetailsModel(BaseModel):
         json_encoders = {ObjectId: str}
         schema_extra = {
             "example": {
-                "food_name": "Fish and Chips",
-                "food_type": "Main",
-                "food_cuisine": "British",
-                "ingredients": "Fish, Chips, Salt, Vinegar",
+                "_id": "60f4d5c5b5f0f0e5e8b2b5c9",
+                "orderID": "60f4d5c5b5f0f0e5e8b2b5c9",
+                "feedback": 2
+            }
+        }
+
+
+@app.get("/feedbacks", response_description="List all feedbacks", response_model=List[FeedbackModel])
+async def list_feedbacks():
+    feedbacks = await db["feedbacks"].find().to_list(data_length)
+    return feedbacks
+
+
+# const foodCategoriesSchema = new Schema(
+#     _id: { type: Schema.Types.ObjectId},
+#     description: { type: String },
+#     image: { type: String },
+#     name: { type: String },
+#   { collection: "foodCategories" }
+
+class foodCategoriesModel(BaseModel):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    description: str = Field(...)
+    image: str = Field(...)
+    name: str = Field(...)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "_id": "60f4d5c5b5f0f0e5e8b2b5c",
+                "description": "Burger with cheese",
+                "image": "https://www.food.com",
+                "name": "Burger"
+            }
+        }
+
+
+# List all food categories
+@app.get("/foodCategories", response_description="List all food categories", response_model=List[foodCategoriesModel])
+async def list_food_categories():
+    foodCategories = await db["foodCatergories"].find().to_list(data_length)
+    return foodCategories
+
+
+# const foodsSchema = new Schema(
+#     _id: { type: Schema.Types.ObjectId, ref: "User" },
+#     name: { type: String },
+#     price: { type: Number },
+#     description: { type: String },
+#     image: { type: String },
+#     category: { type: Schema.Types.ObjectId, ref: "FoodCategory" },},
+#   { collection: "foods" }
+
+class foodsModel(BaseModel):
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    name: str = Field(...)
+    price: int = Field(...)
+    description: str = Field(...)
+    image: str = Field(...)
+    category: PyObjectId = Field(default_factory=PyObjectId)
+
+    class Config:
+        allow_population_by_field_name = True
+        arbitrary_types_allowed = True
+        json_encoders = {ObjectId: str}
+        schema_extra = {
+            "example": {
+                "_id": "60f4d5c5b5f0f0e5e8b2b5c",
+                "name": "Burger",
+                "price": 100,
+                "description": "Burger with cheese",
+                "image": "https://www.food.com",
+                "category": "60f4d5c5b5f0f0e5e8b2b5c"
             }
         }
 
 
 # List all foods
-@app.get("/fooddetails", response_description="List all foods", response_model=List[FoodDetailsModel])
+@app.get("/foods", response_description="List all foods", response_model=List[foodsModel])
 async def list_foods():
-    foods = await db["foodDetails"].find().to_list(data_length)
+    foods = await db["foods"].find().to_list(data_length)
     return foods
 
 
@@ -150,6 +219,10 @@ class OrderModel(BaseModel):
     orderType: str = Field(...)
     table: str = Field(...)
     handleBy: str = Field(...)
+
+    # orderType: PyObjectId = Field(default_factory=PyObjectId)
+    # table: PyObjectId = Field(default_factory=PyObjectId)
+    # handleBy: PyObjectId = Field(default_factory=PyObjectId)
 
     class Config:
         allow_population_by_field_name = True
@@ -221,58 +294,28 @@ async def list_users():
     return users
 
 
-# const feedbackSchema = new Schema(
-#     feedback: { type: String },
-#     userID: { type: Schema.Types.ObjectId, ref: "User" },
-#     orderId: { type: Schema.Types.ObjectId, ref: "Order" },
-#   { collection: "feedbacks" }
-
-class FeedbackModel(BaseModel):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    orderID: PyObjectId = Field(default_factory=PyObjectId)
-    feedback: str
-
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        schema_extra = {
-            "example": {
-                "_id": "60f4d5c5b5f0f0e5e8b2b5c9",
-                "orderID": "60f4d5c5b5f0f0e5e8b2b5c9",
-                "feedback": 2
-            }
-        }
-
-
-@app.get("/feedbacks", response_description="List all feedbacks", response_model=List[FeedbackModel])
-async def list_feedbacks():
-    feedbacks = await db["feedbacks"].find().to_list(data_length)
-    return feedbacks
-
-
 # 1. Aggregate orders with orderItemWithQuantities
 # 2. for each orderItem get orderedBy and for that get dateOfBirth from users
-# 3. for each orderItem get food_id, food_type, Ingredients from foodDetails by food_name
+# 3. for each orderItem get food_id, food_type, Ingredients from foods by food_name
 #
 # user_id        :  orders.orderedBy
 # age            :  users.dateOfBirth
 # food_id        :  orderItemWithQuantities._id
-# food_name      :  foodDetails.food
-# food_type      :  foodDetails.food_type
-# Ingredients    :  foodDetails.Ingredients
+# food_name      :  foods.food
+# food_type      :  foods.food_type
+# Ingredients    :  foods.Ingredients
 # food_rating    :  feedbacks.feedback
 
-# FoodDetailsModel
+# foodsModel
 # OrderItemWithQuantityModel
 # OrderModel
 # UserModel
 # FeedbackModel
 
-# take data from orders, orderItemWithQuantities, foodDetails, users, feedbacks and aggregate them
+# take data from orders, orderItemWithQuantities, foods, users, feedbacks and aggregate them
 # 1. Aggregate orders with orderItemWithQuantities
 # 2. for each orderItem get orderedBy and for that get dateOfBirth from users
-# 3. for each orderItem get food_id, food_type, Ingredients from foodDetails by food_name
+# 3. for each orderItem get food_id, food_type, Ingredients from foods by food_name
 
 
 #   {
@@ -330,40 +373,28 @@ base_url = "http://localhost:8000/"
 save_path = "data/"
 
 
-def call_api():
-    url_list = ["orderItemWithQuantities", "orders", "fooddetails", "users", "feedbacks"]
-
-    for url in url_list:
-        url = base_url + url
-        print("URL: ", url)
-        try:
-            response = requests.get(url).json()
-        except Exception as e:
-            print("Error: ", e)
-        # convert to dataframe
-        # If using all scalar values, you must pass an index
-        df = pd.DataFrame(response)
-        # save to csv
-        df.to_csv(save_path + url.split("/")[-1] + ".csv", index=False)
-
-        print("\n\nName of the file: ", url.split("/")[-1])
-        print(df.head())
-
-
 def aggregate_data():
     # read csv
     orderItemWithQuantities_df = pd.read_csv(save_path + "orderItemWithQuantities.csv")
     orders_df = pd.read_csv(save_path + "orders.csv")
-    foodDetails_df = pd.read_csv(save_path + "fooddetails.csv")
+    foods_df = pd.read_csv(save_path + "foods.csv")
     users_df = pd.read_csv(save_path + "users.csv")
     feedbacks_df = pd.read_csv(save_path + "feedbacks.csv")
+    food_category_df = pd.read_csv(save_path + "food_categories.csv")
 
     # rename _id to id in all dataframes
     # orderItemWithQuantities_df.rename(columns={'_id': 'id'}, inplace=True)
     # orders_df.rename(columns={'_id': 'id'}, inplace=True)
-    # foodDetails_df.rename(columns={'_id': 'id'}, inplace=True)
+    # foods_df.rename(columns={'_id': 'id'}, inplace=True)
     # users_df.rename(columns={'_id': 'id'}, inplace=True)
     # feedbacks_df.rename(columns={'_id': 'id'}, inplace=True)
+
+    print(orderItemWithQuantities_df.head())
+    print(orders_df.head())
+    print(foods_df.head())
+    print(users_df.head())
+    print(feedbacks_df.head())
+    print(food_category_df.head())
 
     # keep only required columns
     # ['_id', 'orderID', 'food']
@@ -371,11 +402,13 @@ def aggregate_data():
     # ['_id', 'orderedBy', 'orderType']
     orders_df = orders_df[['_id', 'orderedBy', 'orderType']]
     # ['_id', 'food_name', 'food_type', 'food_cuisine', 'ingredients']
-    foodDetails_df = foodDetails_df[['_id', 'food_name', 'food_type', 'food_cuisine', 'ingredients']]
+    foods_df = foods_df[['_id', 'name', 'price', 'description', 'category']]
     # ['_id', 'dateOfBirth']
     users_df = users_df[['_id', 'dateOfBirth']]
     # ['_id', 'orderID', 'feedback']
     feedbacks_df = feedbacks_df[['_id', 'orderID', 'feedback']]
+    # ['_id', 'name']
+    food_category_df = food_category_df[['_id', 'name']]
 
     # rename orderWithQuantities_df _id to orderItemID
     orderItemWithQuantities_df.rename(columns={'_id': 'orderItemID'}, inplace=True)
@@ -383,7 +416,7 @@ def aggregate_data():
     # print list of columns in each dataframe
     print("orderItemWithQuantities_df: ", orderItemWithQuantities_df.columns)
     print("orders_df: ", orders_df.columns)
-    print("foodDetails_df: ", foodDetails_df.columns)
+    print("foods_df: ", foods_df.columns)
     print("users_df: ", users_df.columns)
     print("feedbacks_df: ", feedbacks_df.columns)
 
@@ -394,11 +427,17 @@ def aggregate_data():
         print(df[df['orderID'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
 
-    # add foodDetails_df to df by id to food
-    df = pd.merge(df, foodDetails_df, left_on='food', right_on='_id')
+    # save df to csv
+    df.to_csv(save_path + "a1.csv", index=False)
+
+    # add foods_df to df by id to food
+    df = pd.merge(df, foods_df, left_on='food', right_on='_id')
     if '_id' in df.columns:
         print(df[df['food'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
+
+    # save df to csv
+    df.to_csv(save_path + "a2.csv", index=False)
 
     # add users_df to df by id to orderedBy
     df = pd.merge(df, users_df, left_on='orderedBy', right_on='_id')
@@ -406,11 +445,26 @@ def aggregate_data():
         print(df[df['orderedBy'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
 
+    df.to_csv(save_path + "a3.csv", index=False)
+
     # add feedbacks_df to df by id to orderID
     df = pd.merge(df, feedbacks_df, left_on='orderID', right_on='orderID')
     if '_id' in df.columns:
         print(df[df['orderID'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
+
+    df.to_csv(save_path + "a4.csv", index=False)
+
+
+    print("\n\nBefore Merge")
+    # add food_category_df to df by id to category
+    df = pd.merge(df, food_category_df, left_on='category', right_on='_id')
+    if '_id' in df.columns:
+        print(df[df['category'] != df['_id']])
+        df.drop(columns=['_id'], inplace=True)
+
+    print("\n\nAfter Merge")
+    df.to_csv(save_path + "a5.csv", index=False)
 
     # save to csv
     df.to_csv(save_path + "aggregate.csv", index=False)
@@ -534,21 +588,24 @@ async def get_recommendation(user_id: str, num_of_rec: int = 5):
 async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
     orderItemWithQuantities = await list_order_items_with_quantities()
     orders = await list_orders()
-    fooddetails = await list_foods()
+    foods = await list_foods()
     users = await list_users()
     feedbacks = await list_feedbacks()
+    food_categories = await list_food_categories()
 
     orderItemWithQuantities = pd.DataFrame(orderItemWithQuantities)
     orders = pd.DataFrame(orders)
-    fooddetails = pd.DataFrame(fooddetails)
+    foods = pd.DataFrame(foods)
     users = pd.DataFrame(users)
     feedbacks = pd.DataFrame(feedbacks)
+    food_categories = pd.DataFrame(food_categories)
 
     orderItemWithQuantities.to_csv(save_path + "orderItemWithQuantities.csv", index=False)
     orders.to_csv(save_path + "orders.csv", index=False)
-    fooddetails.to_csv(save_path + "fooddetails.csv", index=False)
+    foods.to_csv(save_path + "foods.csv", index=False)
     users.to_csv(save_path + "users.csv", index=False)
     feedbacks.to_csv(save_path + "feedbacks.csv", index=False)
+    food_categories.to_csv(save_path + "food_categories.csv", index=False)
 
     aggregate_data()
     process_data()
@@ -567,21 +624,24 @@ async def get_recommendation_load(user_id: str, num_of_rec: int = 5):
 async def load_data(request: Request):
     orderItemWithQuantities = await list_order_items_with_quantities()
     orders = await list_orders()
-    fooddetails = await list_foods()
+    foods = await list_foods()
     users = await list_users()
     feedbacks = await list_feedbacks()
+    food_categories = await list_food_categories()
 
     orderItemWithQuantities = pd.DataFrame(orderItemWithQuantities)
     orders = pd.DataFrame(orders)
-    fooddetails = pd.DataFrame(fooddetails)
+    foods = pd.DataFrame(foods)
     users = pd.DataFrame(users)
     feedbacks = pd.DataFrame(feedbacks)
+    food_categories = pd.DataFrame(food_categories)
 
     orderItemWithQuantities.to_csv(save_path + "orderItemWithQuantities.csv", index=False)
     orders.to_csv(save_path + "orders.csv", index=False)
-    fooddetails.to_csv(save_path + "fooddetails.csv", index=False)
+    foods.to_csv(save_path + "foods.csv", index=False)
     users.to_csv(save_path + "users.csv", index=False)
     feedbacks.to_csv(save_path + "feedbacks.csv", index=False)
+    food_categories.to_csv(save_path + "food_categories.csv", index=False)
 
     aggregate_data()
     process_data()
@@ -597,21 +657,24 @@ async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
     if load_log():
         orderItemWithQuantities = await list_order_items_with_quantities()
         orders = await list_orders()
-        fooddetails = await list_foods()
+        foods = await list_foods()
         users = await list_users()
         feedbacks = await list_feedbacks()
+        food_categories = await list_food_categories()
 
         orderItemWithQuantities = pd.DataFrame(orderItemWithQuantities)
         orders = pd.DataFrame(orders)
-        fooddetails = pd.DataFrame(fooddetails)
+        foods = pd.DataFrame(foods)
         users = pd.DataFrame(users)
         feedbacks = pd.DataFrame(feedbacks)
+        food_categories = pd.DataFrame(food_categories)
 
         orderItemWithQuantities.to_csv(save_path + "orderItemWithQuantities.csv", index=False)
         orders.to_csv(save_path + "orders.csv", index=False)
-        fooddetails.to_csv(save_path + "fooddetails.csv", index=False)
+        foods.to_csv(save_path + "foods.csv", index=False)
         users.to_csv(save_path + "users.csv", index=False)
         feedbacks.to_csv(save_path + "feedbacks.csv", index=False)
+        food_categories.to_csv(save_path + "food_categories.csv", index=False)
 
         aggregate_data()
         process_data()
@@ -623,3 +686,6 @@ async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
     else:
         recommendation, user_stat = get_rec(user_id, num_of_rec=5)
     return {"recommendations": recommendation}
+
+
+aggregate_data()

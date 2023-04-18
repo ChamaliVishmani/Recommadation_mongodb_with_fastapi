@@ -25,7 +25,6 @@ def get_rec(my_profile, num_of_rec):
         'food': 'food_id',
         'food_name': 'food_name',
         'food_type': 'food_type',
-        'ingredients': 'Ingredients',
         'feedback': 'food_rating'
     }, inplace=True)
 
@@ -110,7 +109,7 @@ def get_rec(my_profile, num_of_rec):
                                  stop_words=stopwords_list)
 
     item_ids = df['food_id'].tolist()
-    tfidf_matrix = vectorizer.fit_transform(df['food_name'] + "" + df['Ingredients'])
+    tfidf_matrix = vectorizer.fit_transform(df['food_name'])
     tfidf_feature_names = vectorizer.get_feature_names_out()
 
     def get_item_profile(item_id):
