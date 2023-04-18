@@ -436,9 +436,6 @@ def aggregate_data():
         print(df[df['food'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
 
-    # save df to csv
-    df.to_csv(save_path + "a2.csv", index=False)
-
     # add users_df to df by id to orderedBy
     df = pd.merge(df, users_df, left_on='orderedBy', right_on='_id')
     if '_id' in df.columns:
@@ -472,8 +469,8 @@ def aggregate_data():
     print("\n\nName of the file: aggregate")
     print(df.head())
 
-
 def process_data():
+
     # load csv
     df = pd.read_csv(save_path + "aggregate.csv")
 
@@ -491,6 +488,13 @@ def process_data():
     # convert age to years (int)
     df['age'] = df['age'].dt.days / 365
     df['age'] = df['age'].astype(int)
+
+    # drop orderType, price, food, category
+    df.drop(columns=['orderType', 'price', 'category', 'orderID'], inplace=True)
+
+    # rename columns name_x -> food, name_y -> cuisine
+    df.rename(columns={'name_x': 'food_name', 'name_y': 'cuisine', 'food': 'food_id'}, inplace=True)
+
 
     # save to csv
     df.to_csv(save_path + "processed.csv", index=False)
@@ -689,3 +693,8 @@ async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
 
 
 aggregate_data()
+process_data()
+pre_process()
+recommendation, user_stat = get_rec("64315d86362c27c707fe155c", num_of_rec=5)
+
+print(recommendation)
