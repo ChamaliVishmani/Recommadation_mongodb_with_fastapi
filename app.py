@@ -56,12 +56,14 @@ class PyObjectId(ObjectId):
 #     feedback: { type: String },
 #     userID: { type: Schema.Types.ObjectId, ref: "User" },
 #     orderId: { type: Schema.Types.ObjectId, ref: "Order" },
+#     feedback_text: { type: String },
 #   { collection: "feedbacks" }
 
 class FeedbackModel(BaseModel):
     id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
     orderID: PyObjectId = Field(default_factory=PyObjectId)
     feedback: str
+    feedback_text: str
 
     class Config:
         allow_population_by_field_name = True
@@ -71,7 +73,8 @@ class FeedbackModel(BaseModel):
             "example": {
                 "_id": "60f4d5c5b5f0f0e5e8b2b5c9",
                 "orderID": "60f4d5c5b5f0f0e5e8b2b5c9",
-                "feedback": 2
+                "feedback": 2,
+                "feedback_text": "Good"
             }
         }
 
@@ -427,9 +430,6 @@ def aggregate_data():
         print(df[df['orderID'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
 
-    # save df to csv
-    df.to_csv(save_path + "a1.csv", index=False)
-
     # add foods_df to df by id to food
     df = pd.merge(df, foods_df, left_on='food', right_on='_id')
     if '_id' in df.columns:
@@ -442,16 +442,11 @@ def aggregate_data():
         print(df[df['orderedBy'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
 
-    df.to_csv(save_path + "a3.csv", index=False)
-
     # add feedbacks_df to df by id to orderID
     df = pd.merge(df, feedbacks_df, left_on='orderID', right_on='orderID')
     if '_id' in df.columns:
         print(df[df['orderID'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
-
-    df.to_csv(save_path + "a4.csv", index=False)
-
 
     print("\n\nBefore Merge")
     # add food_category_df to df by id to category
@@ -459,9 +454,6 @@ def aggregate_data():
     if '_id' in df.columns:
         print(df[df['category'] != df['_id']])
         df.drop(columns=['_id'], inplace=True)
-
-    print("\n\nAfter Merge")
-    df.to_csv(save_path + "a5.csv", index=False)
 
     # save to csv
     df.to_csv(save_path + "aggregate.csv", index=False)
@@ -692,9 +684,3 @@ async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
     return {"recommendations": recommendation}
 
 
-aggregate_data()
-process_data()
-pre_process()
-recommendation, user_stat = get_rec("64315d86362c27c707fe155c", num_of_rec=5)
-
-print(recommendation)
