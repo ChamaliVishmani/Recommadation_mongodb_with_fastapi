@@ -60,7 +60,7 @@ def lemmatize(pos_data):
     return lemma_rew
 
 
-def process_data():
+def process_data_sentiment():
     # load csv
     df = pd.read_csv("dataset/Food_ordering_feedback_dataset.csv")
 
@@ -91,6 +91,7 @@ def sentence_to_words(sentences):
 
 
 def train_sentiment():
+    process_data_sentiment()
     # load csv
     df = pd.read_csv("data/sentiment/lemma.csv")
 
@@ -177,30 +178,17 @@ def train_sentiment():
 
     model1.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
 
-    checkpoint1 = ModelCheckpoint("data/sentiment/model1_chk/best_model1.hdf5",
+    checkpoint1 = ModelCheckpoint("data/sentiment/best_model.hdf5",
                                   monitor='val_accuracy', verbose=1, save_best_only=True, mode='auto', period=1,
                                   save_weights_only=False)
     early = EarlyStopping(monitor="val_accuracy", mode="max", patience=20)
     model1.fit(X_train, y_train, epochs=70, validation_data=(X_test, y_test), callbacks=[checkpoint1, early])
 
-    # Bidirectional LTSM model
-    model2 = Sequential()
-    model2.add(layers.Embedding(max_words, 40, input_length=max_len))
-    model2.add(layers.Bidirectional(layers.LSTM(20, dropout=0.6)))
-    model2.add(layers.Dense(3, activation='softmax'))
-    model2.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
-
-    checkpoint2 = ModelCheckpoint("data/sentiment/model1_chk/best_model2.hdf5", monitor='val_accuracy', verbose=1,
-                                  save_best_only=True, mode='auto', period=1, save_weights_only=False)
-    model2.fit(X_train, y_train, epochs=70, validation_data=(X_test, y_test), callbacks=[checkpoint2])
-
     # save the model
-    model1.save('data/sentiment/model/model1.h5')
-    model2.save('data/sentiment/model/model2.h5')
+    model1.save('data/sentiment/model.h5')
 
     # save model weights
-    model1.save_weights('data/sentiment/model_weights/model1_weights.h5')
-    model2.save_weights('data/sentiment/model_weights/model2_weights.h5')
+    model1.save_weights('data/sentiment/model_weights.h5')
 
 
 def predict_sentiment(text):
@@ -209,7 +197,7 @@ def predict_sentiment(text):
         tokenizer = pickle.load(handle)
 
     # Let's load the best model obtained during training
-    best_model = keras.models.load_model("data/sentiment/model2_chk/best_model2.hdf5")
+    best_model = keras.models.load_model("data/sentiment/best_model.hdf5")
     best_model.summary()
 
     max_len = 200
@@ -237,9 +225,3 @@ def pre_process(df):
     df["selected_text"].fillna("No content", inplace=True)
 
     return df
-
-
-if __name__ == '__main__':
-    process_data()
-    train_sentiment()
-    predict_sentiment('The restaurant provided updates on the status of our order, which was very helpful.')

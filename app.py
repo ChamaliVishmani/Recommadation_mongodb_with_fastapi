@@ -35,6 +35,9 @@ db = client.food_test
 
 data_length = 100000
 
+from recommand import get_rec
+from sentiment import train_sentiment, predict_sentiment
+
 
 class PyObjectId(ObjectId):
     @classmethod
@@ -461,8 +464,8 @@ def aggregate_data():
     print("\n\nName of the file: aggregate")
     print(df.head())
 
-def process_data():
 
+def process_data():
     # load csv
     df = pd.read_csv(save_path + "aggregate.csv")
 
@@ -486,7 +489,6 @@ def process_data():
 
     # rename columns name_x -> food, name_y -> cuisine
     df.rename(columns={'name_x': 'food_name', 'name_y': 'cuisine', 'food': 'food_id'}, inplace=True)
-
 
     # save to csv
     df.to_csv(save_path + "processed.csv", index=False)
@@ -562,9 +564,6 @@ def load_log():
         return True
     else:
         return False
-
-
-from recommand import get_rec
 
 
 # Recommendation
@@ -684,3 +683,15 @@ async def get_recommendation_load_update(user_id: str, num_of_rec: int = 5):
     return {"recommendations": recommendation}
 
 
+# sentiment analysis
+@app.get("/sentiment-analysis/{text}")
+async def get_sentiment_analysis(text: str):
+    sentiment = predict_sentiment(text)
+    return {"sentiment": sentiment}
+
+
+# train sentiment model
+@app.get("/train-sentiment-model")
+async def train_sentiment_model():
+    train_sentiment()
+    return {"status": "success"}

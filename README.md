@@ -20,3 +20,5 @@ You can test with,
     existing_profile = "64315d86362c27c707fe155c"
 
     new_profile = "64315d86362c27c707fe152z"
+
+    sentiment = "The restaurant provided updates on the status of our order, which was very helpful."
