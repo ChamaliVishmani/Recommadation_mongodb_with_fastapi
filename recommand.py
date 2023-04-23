@@ -1,3 +1,5 @@
+import math
+
 import numpy as np
 import pandas as pd
 import scipy
@@ -14,18 +16,17 @@ from sklearn.preprocessing import MinMaxScaler
 pd.set_option('display.max_columns', None)
 
 
+def smooth_user_preference(x):
+    return math.log(1 + x, 2)
+
+
 def get_rec(my_profile, num_of_rec):
     # load csv file
     df = pd.read_csv("data/pre_processed.csv")
 
+    # _id_x,customerId,productId,interactionType,productName,description,productCatrgoryName,productCategoryId
     df.rename(columns={
-        'orderedBy': 'user_id',
-        'age': 'age',
-        'food_cuisine': 'cuisine',
-        'food': 'food_id',
-        'food_name': 'food_name',
-        'food_type': 'food_type',
-        'feedback': 'food_rating'
+        'orderedBy': 'user_id'
     }, inplace=True)
 
     df = df.drop_duplicates()
@@ -33,36 +34,36 @@ def get_rec(my_profile, num_of_rec):
 
     #############################################################################################
 
-    # keep only user_id, food_name, food_rating columns in new df
-    new_df = df[['user_id', 'food_id', 'food_rating']]
-    # By taking user_id, food_id as index, we can easily get the food_rating for a given user_id and food_id
-    new_df = new_df.set_index(['user_id', 'food_id'])
-
-    # remove duplicate rows with sum of food_rating
-    new_df = new_df.groupby(level=[0, 1]).sum()
-
-    # separate user_id and food_id from index
-    new_df = new_df.reset_index(level=[0, 1])
-
-    # randomly mix the rows
-    new_df = new_df.sample(frac=1).reset_index(drop=True)
+    interactions_full_df = df.groupby(['user_id', 'food_id'])['feedback'].sum().apply(
+        smooth_user_preference).reset_index()
+    print('# of unique user/item interactions: %d' % len(interactions_full_df))
+    print("Interactions full df:")
+    print(interactions_full_df.head(10))
 
     new_train_df, new_test_df = train_test_split(
-        new_df,
-        stratify=new_df['user_id'],
+        interactions_full_df,
+        stratify=interactions_full_df['user_id'],
         test_size=0.20,
         random_state=42
     )
 
     # Indexing by user_id to speed up the searches during evaluation
-    full_indexed_df = new_df.set_index('user_id')
+    full_indexed_df = interactions_full_df.set_index('user_id')
     train_indexed_df = new_train_df.set_index('user_id')
     test_indexed_df = new_test_df.set_index('user_id')
 
-    def get_interacted_items(person_id, interactions_df):
-        # Get the user's data and merge in the food data.
-        interacted_items = interactions_df.loc[person_id]['food_id']
-        return set(interacted_items if type(interacted_items) == pd.Series else [interacted_items])
+    # Computes the most popular items
+    def most_popular_items(interactions_df, item_id, topn=10):
+        # Get a count of user_ids for each unique food as
+        # a series of food ids and popularity
+        item_popularity_df = interactions_df.groupby(item_id)['feedback'].sum().sort_values(
+            ascending=False).reset_index()
+        return item_popularity_df
+
+    # Get the most popular items
+    item_popularity_df = most_popular_items(full_indexed_df, 'food_id', 10)
+    print("Item popularity df:")
+    print(item_popularity_df.head(10))
 
     class PopularityRecommender:
         MODEL_NAME = 'Popularity'
@@ -77,7 +78,7 @@ def get_rec(my_profile, num_of_rec):
         def recommend_items(self, user_id, items_to_ignore=[], topn=10, verbose=False):
             # Recommend the more popular items that the user hasn't seen yet.
             recommendations_df = self.popularity_df[~self.popularity_df['food_id'].isin(items_to_ignore)] \
-                .sort_values('food_rating', ascending=False) \
+                .sort_values('feedback', ascending=False) \
                 .head(topn)
 
             if verbose:
@@ -87,9 +88,15 @@ def get_rec(my_profile, num_of_rec):
                 recommendations_df = recommendations_df.merge(self.items_df, how='left',
                                                               left_on='food_id',
                                                               right_on='food_id')[
-                    ['food_rating', 'food_id', 'food_name', 'veg', 'cuisine']]
+                    ['feedback', 'food_id']]
+                # ['feedback', 'food_id', 'food_name', 'veg', 'cuisine']]
 
             return recommendations_df
+
+    popularity_model = PopularityRecommender(item_popularity_df, df)
+
+    print('Recommend Popularity recommendation model...')
+    print(popularity_model.recommend_items(my_profile, topn=2))
 
     ####################################################################### Content-Based Filtering model
 
@@ -109,7 +116,7 @@ def get_rec(my_profile, num_of_rec):
                                  stop_words=stopwords_list)
 
     item_ids = df['food_id'].tolist()
-    tfidf_matrix = vectorizer.fit_transform(df['food_name'])
+    tfidf_matrix = vectorizer.fit_transform(df['food_name'] + "" + df['description'] + "" + df['cuisine'])
     tfidf_feature_names = vectorizer.get_feature_names_out()
 
     def get_item_profile(item_id):
@@ -126,12 +133,12 @@ def get_rec(my_profile, num_of_rec):
         interactions_person_df = interactions_indexed_df.loc[person_id]
         user_item_profiles = get_item_profiles(interactions_person_df['food_id'])
 
-        user_item_strengths = np.array(interactions_person_df['food_rating']).reshape(-1, 1)
+        user_item_strengths = np.array(interactions_person_df['feedback']).reshape(-1, 1)
         # Weighted average of item profiles by the interactions strength
         user_item_strengths_weighted_avg = np.sum(user_item_profiles.multiply(user_item_strengths), axis=0) / np.sum(
             user_item_strengths)
 
-        user_item_strengths = np.array(interactions_person_df['food_rating']).reshape(-1, 1)
+        user_item_strengths = np.array(interactions_person_df['feedback']).reshape(-1, 1)
         # Weighted average of item profiles by the interactions strength
         user_item_strengths_weighted_avg = np.sum(user_item_profiles.multiply(user_item_strengths), axis=0) / np.sum(
             user_item_strengths)
@@ -149,7 +156,10 @@ def get_rec(my_profile, num_of_rec):
             user_profiles[person_id] = build_users_profile(person_id, interactions_indexed_df)
         return user_profiles
 
+    print("Building user profiles...")
     user_profiles = build_users_profiles()
+
+    print(user_profiles)
 
     class ContentBasedRecommender:
         MODEL_NAME = 'Content-Based'
@@ -176,8 +186,13 @@ def get_rec(my_profile, num_of_rec):
             # Ignores items the user has already interacted
             similar_items_filtered = list(filter(lambda x: x[0] not in items_to_ignore, similar_items))
 
-            recommendations_df = pd.DataFrame(similar_items_filtered, columns=['food_id', 'recStrength']) \
-                .head(topn)
+            recommendations_df = pd.DataFrame(similar_items_filtered, columns=['food_id', 'recStrength'])
+            # remove duplicates
+            recommendations_df = recommendations_df.drop_duplicates(subset=['food_id'])
+            # sort by recStrength
+            recommendations_df = recommendations_df.sort_values(by='recStrength', ascending=False)
+            # topn
+            recommendations_df = recommendations_df.head(topn)
 
             if verbose:
                 if self.items_df is None:
@@ -186,18 +201,22 @@ def get_rec(my_profile, num_of_rec):
                 recommendations_df = recommendations_df.merge(self.items_df, how='left',
                                                               left_on='food_id',
                                                               right_on='food_id')[
-                    ['recStrength', 'food_id', 'food_name', 'cuisine']]
+                    ['recStrength', 'food_id', 'food_name']]
 
-            return recommendations_df
+            return recommendations_df.drop_duplicates(subset=['food_id'])
 
     content_based_recommender_model = ContentBasedRecommender(df)
+
+    # recommand
+    print("Recommending top 10 items to user 1...")
+    print(content_based_recommender_model.recommend_items(my_profile, topn=10, verbose=True))
 
     ####################################################################### Collaborative Filtering model
 
     # Creating a sparse pivot table with users in rows and items in columns
     users_items_pivot_matrix_df = new_train_df.pivot(index='user_id',
                                                      columns='food_id',
-                                                     values='food_rating').fillna(0)
+                                                     values='feedback').fillna(0)
 
     users_items_pivot_matrix = users_items_pivot_matrix_df.values
     users_ids = list(users_items_pivot_matrix_df.index)
@@ -245,11 +264,15 @@ def get_rec(my_profile, num_of_rec):
                 recommendations_df = recommendations_df.merge(self.items_df, how='left',
                                                               left_on='food_id',
                                                               right_on='food_id')[
-                    ['recStrength', 'food_id', 'food_name', 'cuisine']]
+                    ['recStrength', 'food_id', 'food_name']]
 
-            return recommendations_df
+            return recommendations_df.drop_duplicates(subset=['food_id'])
 
     cf_recommender_model = CFRecommender(cf_preds_df, df)
+
+    # recommand
+    print("Recommending top 10 items to user 1...")
+    print(cf_recommender_model.recommend_items(my_profile, topn=10, verbose=True))
 
     ####################################################################### Hybrid model
 
@@ -287,7 +310,13 @@ def get_rec(my_profile, num_of_rec):
                     recs_df['recStrengthCF'] * self.cf_ensemble_weight)
 
             # Sorting recommendations by hybrid score
-            recommendations_df = recs_df.sort_values('recStrengthHybrid', ascending=False).head(topn)
+            recommendations_df = recs_df.sort_values('recStrengthHybrid', ascending=False)
+            recommendations_df = recommendations_df.drop(['recStrengthCB', 'recStrengthCF'], axis=1)
+
+            # Recommend the highest predicted rating movies that the user hasn't seen yet.
+            recommendations_df = recommendations_df[~recommendations_df['food_id'].isin(items_to_ignore)] \
+                .sort_values('recStrengthHybrid', ascending=False) \
+                .head(topn)
 
             if verbose:
                 if self.items_df is None:
@@ -296,9 +325,16 @@ def get_rec(my_profile, num_of_rec):
                 recommendations_df = recommendations_df.merge(self.items_df, how='left',
                                                               left_on='food_id',
                                                               right_on='food_id')[
-                    ['recStrengthHybrid', 'food_id', 'food_name', 'cuisine']]
+                    ['recStrengthHybrid', 'food_id', 'food_name']]
 
-            return recommendations_df
+            return recommendations_df.drop_duplicates(subset=['food_id']).reset_index(drop=True)
+
+    hybrid_recommender_model = HybridRecommender(content_based_recommender_model, cf_recommender_model, df,
+                                                 cb_ensemble_weight=1.0, cf_ensemble_weight=100.0)
+
+    # recommand
+    print("Recommending top 10 items to user 1...")
+    print(hybrid_recommender_model.recommend_items(my_profile, topn=10, verbose=True))
 
     if my_profile in user_profiles:
         # print("my profile is in user_profiles")
@@ -309,18 +345,13 @@ def get_rec(my_profile, num_of_rec):
                      columns=['token', 'relevance'])
 
         # remove duplicates
-        recommadation = cf_recommender_model.recommend_items(my_profile, topn=50, verbose=True)
-        recommadation = recommadation.drop_duplicates(subset='food_id', keep="first")
+        recommadation = hybrid_recommender_model.recommend_items(my_profile, topn=10, verbose=True)
 
         return recommadation.head(num_of_rec)['food_id'].tolist(), 1
 
     else:
-        # print("my profile is not in user_profiles")
-
         # return top 10 popular items
-        item_popularity_df = new_train_df.groupby('food_id')['food_rating'].sum().sort_values(
-            ascending=False).reset_index()
-
+        item_popularity_df = most_popular_items(full_indexed_df, 'food_id', 10)
         item_popularity_df_head = item_popularity_df.head(num_of_rec)['food_id'].tolist()
 
         return item_popularity_df_head, 0

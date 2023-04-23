@@ -194,7 +194,7 @@ def train_sentiment():
 
 def predict_sentiment(text):
     # load tokenizer
-    with open('data/tokenizer.pickle', 'rb') as handle:
+    with open('data/sentiment/tokenizer.pickle', 'rb') as handle:
         tokenizer = pickle.load(handle)
 
     # Let's load the best model obtained during training
