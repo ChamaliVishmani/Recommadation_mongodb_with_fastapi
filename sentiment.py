@@ -1,24 +1,25 @@
-import warnings
-from keras.models import Sequential
-from keras import layers
-from keras.preprocessing.text import Tokenizer
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from keras.callbacks import ModelCheckpoint, EarlyStopping
 import pickle
 import re
+import warnings
+
 import gensim
-from nltk.tokenize.treebank import TreebankWordDetokenizer
-from sklearn.model_selection import train_test_split
-import tensorflow as tf
 import keras
+import nltk
 import numpy as np
 import pandas as pd
-import nltk
-from nltk.tokenize import word_tokenize
+import tensorflow as tf
+from keras import layers
+from keras.callbacks import ModelCheckpoint, EarlyStopping
+from keras.models import Sequential
+from keras.preprocessing.text import Tokenizer
 from nltk import pos_tag
 from nltk.corpus import stopwords
 from nltk.corpus import wordnet
 from nltk.stem import WordNetLemmatizer
+from nltk.tokenize import word_tokenize
+from nltk.tokenize.treebank import TreebankWordDetokenizer
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 warnings.filterwarnings('ignore')
 nltk.download('punkt')

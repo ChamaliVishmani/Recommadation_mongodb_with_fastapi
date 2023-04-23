@@ -1,4 +1,5 @@
 import math
+
 import numpy as np
 import pandas as pd
 import scipy
@@ -32,7 +33,6 @@ def get_rec(my_profile, num_of_rec):
     df = df.dropna()
 
     #############################################################################################
-
 
     interactions_full_df = df.groupby(['user_id', 'food_id'])['feedback'].sum().apply(
         smooth_user_preference).reset_index()
